@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9d61331728932b4ea233fadb8622569, type: 3}
+  m_Name: Assets
+  m_EditorClassIdentifier: 
+  DefenderBlockPrefab: {fileID: 6408730778013384597, guid: a3abd77c23e66064992d91c265a381ec, type: 3}
+  BlockPrefab: {fileID: 5865747284160022913, guid: e4f70f30d4bf5a24ba241f4922f0e9fd, type: 3}
+  MinusBlockPrefab: {fileID: 4468959485422580570, guid: aaccd2a0ee12db844a28e919e01db611, type: 3}
+  MultiplierBlockPrefab: {fileID: 7614704539838940041, guid: 7212af255b595cf4283bab6fbea794ff, type: 3}
+  ColorTheme: {fileID: 11400000, guid: 2361a5259e77ae84aa223bba8f969fde, type: 2}
+  DefenderBlockNumbersToChangeMaterial: 0000000064000000c80000002c01000090010000f401000058020000bc02000020030000e8030000

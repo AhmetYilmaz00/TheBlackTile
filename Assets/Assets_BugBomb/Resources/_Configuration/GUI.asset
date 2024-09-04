@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51631abb7d8854e4abaefd0594a007b2, type: 3}
+  m_Name: GUI
+  m_EditorClassIdentifier: 
+  AllGUIScreens:
+  - {fileID: 2874228997863463659, guid: 7cffbbc00d7eaa245b49b84a38fd73e3, type: 3}
+  - {fileID: 2874228997863463659, guid: 45212cf06a336814889aaf75e158910c, type: 3}
+  ForceSafeAreaForIphone: 0
+  SafeAreaPadding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  AdsEnabled: 0
+  winPanelDelay: 2
+  winPanelWithExplosivesDelay: 2
+  privacyPolicyURL: http://bugbomb.games/home/privacy-policy/
+  showScreenTime: 0.5
+  hideScreenTime: 0.5
+  showPopupTime: 0.3
+  hidePopusTime: 0.3

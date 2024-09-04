@@ -1,0 +1,191 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e6a29b0df5cbc84f87ee844dae4d84f, type: 3}
+  m_Name: Gameplay
+  m_EditorClassIdentifier: 
+  PreloadLevelOnStartup: 0
+  GridSize: {x: 5, y: 7}
+  CellSize: {x: 1, y: 1.3}
+  LineOffset: {x: 0, y: 0, z: 0}
+  BlocksMergeSpeed: 0.17
+  BlocksFallTime: 0.28
+  BlocksFallEase:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  FractureNormalBlocks: 1
+  FractureExplosionForce: 250
+  EarlyGameMin: 3
+  EarlyGameMax: 10
+  EarlyGameLength: 150
+  StartingDifficultyCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.07799339
+      value: 0.22809422
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.17598154
+      value: 0.089775085
+      inSlope: 1.0275412
+      outSlope: 1.0275412
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.23698026
+      value: 0.46088642
+      inSlope: 0.98533744
+      outSlope: 0.98533744
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4087248
+      value: 0.26216954
+      inSlope: 0.75523156
+      outSlope: 0.75523156
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.4997369
+      value: 0.75101113
+      inSlope: 1.1666
+      outSlope: 1.1666
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7235859
+      value: 0.37429842
+      inSlope: 0.93192774
+      outSlope: 0.93192774
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.7663915
+      value: 0.9027743
+      inSlope: 0.46209782
+      outSlope: 0.46209782
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.94825816
+      value: 0.5854292
+      inSlope: 1.2178911
+      outSlope: 1.2178911
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.17548482
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  LateGameMin: 5
+  LateGameMax: 12
+  LateGameLoop: 50
+  LateGateDiffucultyCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.30626482
+      value: 0.6301003
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.10902602
+    - serializedVersion: 3
+      time: 0.68700236
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 6.9889927
+      outSlope: 6.9889927
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.048655223
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  DifficultyVariationPercentage: {x: 0.8, y: 1.2}

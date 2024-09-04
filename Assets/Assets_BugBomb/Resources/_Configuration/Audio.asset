@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11b48559f317647408b8a0657456e3f5, type: 3}
+  m_Name: Audio
+  m_EditorClassIdentifier: 
+  _clipsArray_0: []
+  _clipsArray_1: []
+  _clipsArray_2: []
+  _clipsArray_3: []
+  _clipsArray_4: []
+  _clipsArray_5: []
+  _clipsArray_6: []
+  _clipsArray_7: []
+  _clipsArray_8: []
+  _clipsArray_9: []
+  _clipsArray_10: []
+  _clipsArray_11: []
+  _clipsArray_12: []
+  _clipsArray_13: []
+  _clipsArray_14: []
+  _clipsArray_15: []
+  _clipsArray_16: []
+  _clipsArray_17: []
+  _clipsArray_18: []
+  _clipsArray_19: []

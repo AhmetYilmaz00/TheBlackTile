@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DefenderBlock_animCtrl
+  m_Controller: {fileID: 9100000, guid: 84b248e8222001c439d89a97c980d035, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 009b760fd1d9bd844b32da4faf138793, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 009b760fd1d9bd844b32da4faf138793, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 61f291c882ea17844875b1d0ff1d2aa7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: f196e24b7faea854bbf20d02ae0eaaf2, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 87a0be7d3e49a9e43ac2cafb185ab8d8, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 87a0be7d3e49a9e43ac2cafb185ab8d8, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 33de8740ab1efe94790452a64d6dd42a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 33de8740ab1efe94790452a64d6dd42a, type: 2}

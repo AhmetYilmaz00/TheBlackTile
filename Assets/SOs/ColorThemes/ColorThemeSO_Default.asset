@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2321e4abf93af6545ab464ea7e406108, type: 3}
+  m_Name: ColorThemeSO_Default
+  m_EditorClassIdentifier: 
+  BlockMaterials:
+  - {fileID: 2100000, guid: 3cd0ecde4d563de4da571089ec7bc407, type: 2}
+  - {fileID: 2100000, guid: 26043ab0511307949afa033f0b8ba362, type: 2}
+  - {fileID: 2100000, guid: 74b7abc490cbfa645be1dcb49b442230, type: 2}
+  - {fileID: 2100000, guid: b8e895844f9072c479c60569009bd5cc, type: 2}
+  - {fileID: 2100000, guid: 5abd4895a0590c141ba5e6bc955b6a45, type: 2}
+  - {fileID: 2100000, guid: 82ee8bbda33d2814c85dc81c24d538d7, type: 2}
+  - {fileID: 2100000, guid: cc302e5375080f7499328af4a359c0ff, type: 2}
+  - {fileID: 2100000, guid: fa0e202cbec0eb94ab99049c6685ebd4, type: 2}
+  - {fileID: 2100000, guid: 74ef0e6523a7a4d4187b7a17ee7be87c, type: 2}
+  - {fileID: 2100000, guid: a5aa4a3e077138848ac343489c20eb7d, type: 2}
+  BlocksFontColor: {r: 0.29411766, g: 0.23921569, b: 0.23921569, a: 1}
+  DefenderBlockMaterials:
+  - {fileID: 2100000, guid: 434853af7d589ea48a78134a6fd231eb, type: 2}
+  - {fileID: 2100000, guid: b47b7796be7d02847b2fb8d11adae80b, type: 2}
+  - {fileID: 2100000, guid: f1b2688f1b62dd24087054801f1f5e4f, type: 2}
+  - {fileID: 2100000, guid: 7875ed09712a961498263589d4c4e6f1, type: 2}
+  - {fileID: 2100000, guid: 95dfe3fda34e0154aac6989c8ac06375, type: 2}
+  - {fileID: 2100000, guid: 8639a98fb7519684aaa8a04129bbcfab, type: 2}
+  - {fileID: 2100000, guid: ccc0ca79666765543bce9b0cf1da5c3b, type: 2}
+  - {fileID: 2100000, guid: 7c7b973bb0a3ae6458ab7eca812c9fd7, type: 2}
+  - {fileID: 2100000, guid: 627c66e3555f3a74d9adc3dcab918c29, type: 2}
+  - {fileID: 2100000, guid: f495c5f9862601848a7f1adcc7f64487, type: 2}
+  DefenderBlockFontColor: {r: 1, g: 1, b: 1, a: 1}
+  MinusBlockMaterial: {fileID: 2100000, guid: 4ce1ff67ebd3c794ea38886cfbeafed9, type: 2}
+  MinusBlocksFontColor: {r: 1, g: 1, b: 1, a: 1}
+  BackgroundColor: {r: 0.98039216, g: 0.9764706, b: 0.96862745, a: 1}
+  GuiColor_1: {r: 0.28235295, g: 0.25882354, b: 0.25882354, a: 1}
+  GuiColor_2: {r: 0.5803922, g: 0.53333336, b: 0.53333336, a: 1}
+  GuiColor_3: {r: 0.2, g: 0.18431373, b: 0.18431373, a: 0.14901961}
