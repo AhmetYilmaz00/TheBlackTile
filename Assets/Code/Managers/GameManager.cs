@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Code.AIM_Studio;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using Elympics;
+using Events;
 using NaughtyAttributes;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
-
+    [SerializeField] private GameManagerAim gameManagerAim;
     public PlayerProgress Progress;
 
 
@@ -68,7 +70,10 @@ public class GameManager : SingletonBehaviour<GameManager>
         }
         else
         {
-            StartLevel();
+            if (gameManagerAim.IsServer())
+            {
+                StartLevel();
+            }
         }
     }
 

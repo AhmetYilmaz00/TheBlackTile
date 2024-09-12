@@ -951,8 +951,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d889593f82a004c9298f05010bdc99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seedModifier: 0
   timerDuration: 180
   displayManager: {fileID: 811343014}
+  seedArray:
+    values: []
 --- !u!114 &811343012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2362,6 +2365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb00b54b54db1bb41bd285518fea1ad1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManagerAim: {fileID: 811343011}
   Progress:
     Level: 0
     globalLevelDoneCount: 0
@@ -2474,6 +2478,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartingMaxValue: 5
   BlocksValuesMaxRange: 6
+  seed: 1
   MinusBlocksGenerated: 0
 --- !u!1 &2029984768
 GameObject:

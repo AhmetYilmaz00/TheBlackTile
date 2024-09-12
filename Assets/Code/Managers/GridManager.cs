@@ -1,15 +1,17 @@
 ﻿using DG.Tweening;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.AIM_Studio;
 using UnityEngine;
-using NaughtyAttributes;
+using Random = System.Random;
 
 public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 {
     public int StartingMaxValue = 5;
     public int BlocksValuesMaxRange;
+    [SerializeField] private int seed = 1;
+    private GameManagerAim _gameManagerAim;
 
     public int MaxValue => StartingMaxValue + MinusBlocksGenerated / 7;
     public Block DefenderBlock { get; private set; }
@@ -21,6 +23,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 
     private void Awake()
     {
+        _gameManagerAim = FindObjectOfType<GameManagerAim>();
         Messenger<GameState, GameState>.AddListener(Message.PreGameStateChange, OnGameStatePreChange);
     }
 
@@ -75,7 +78,8 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         var min = MaxValue - BlocksValuesMaxRange;
         if (min < 1)
             min = 1;
-        int number = UnityEngine.Random.Range(min, MaxValue + 1);
+        var rng = new Random(seed + _gameManagerAim.GetElympicsSeed());
+        int number = rng.Next(min, MaxValue + 1);
         block.Setup(number);
 
         return block;
@@ -97,21 +101,25 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         {
             var diffCurve = GameplayConfiguration.instance.StartingDifficultyCurve
                 .Evaluate((float)MinusBlocksGenerated / GameplayConfiguration.instance.EarlyGameLength);
-            float sequenceLength = diffCurve.Remap(0, 1, GameplayConfiguration.instance.EarlyGameMin, GameplayConfiguration.instance.EarlyGameMax);
+            float sequenceLength = diffCurve.Remap(0, 1, GameplayConfiguration.instance.EarlyGameMin,
+                GameplayConfiguration.instance.EarlyGameMax);
 
             number = -Mathf.RoundToInt(meanValue * sequenceLength);
         }
         else
         {
-            var lateGameIndex = (MinusBlocksGenerated - GameplayConfiguration.instance.EarlyGameLength) % GameplayConfiguration.instance.LateGameLoop;
+            var lateGameIndex = (MinusBlocksGenerated - GameplayConfiguration.instance.EarlyGameLength) %
+                                GameplayConfiguration.instance.LateGameLoop;
             var diffCurve = GameplayConfiguration.instance.LateGateDiffucultyCurve
                 .Evaluate((float)lateGameIndex / GameplayConfiguration.instance.LateGameLoop);
-            float sequenceLength = diffCurve.Remap(0, 1, GameplayConfiguration.instance.LateGameMin, GameplayConfiguration.instance.LateGameMax);
+            float sequenceLength = diffCurve.Remap(0, 1, GameplayConfiguration.instance.LateGameMin,
+                GameplayConfiguration.instance.LateGameMax);
 
             number = -Mathf.RoundToInt(meanValue * sequenceLength);
         }
 
-        number = Mathf.RoundToInt(number * UnityEngine.Random.Range(GameplayConfiguration.instance.DifficultyVariationPercentage.x,
+        number = Mathf.RoundToInt(number * UnityEngine.Random.Range(
+            GameplayConfiguration.instance.DifficultyVariationPercentage.x,
             GameplayConfiguration.instance.DifficultyVariationPercentage.y));
 
         block.Setup(number);
@@ -144,6 +152,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
             if (yMax < child.position.y)
                 yMax = child.position.y;
         }
+
         return new Vector3((xMax - xMin) / 2, (yMax - yMin) / 2, 0.25f) + new Vector3(xMin, yMin);
     }
 
@@ -170,23 +179,27 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         //defenderBlock.SetMoving(true);
         while (blockToMergeIndex < selectedBlocks.Count)
         {
-            InputManager.instance.UpdateLineRenderer(selectedBlocks.TakeLast(selectedBlocks.Count - blockToMergeIndex).ToList());
+            InputManager.instance.UpdateLineRenderer(selectedBlocks.TakeLast(selectedBlocks.Count - blockToMergeIndex)
+                .ToList());
 
             var posZ = transform.position.z;
             var seq = DOTween.Sequence();
-            seq.Insert(0, defenderBlock.transform.DOMoveX(selectedBlocks[blockToMergeIndex].transform.position.x, GameplayConfiguration.instance.BlocksMergeSpeed)
+            seq.Insert(0, defenderBlock.transform.DOMoveX(selectedBlocks[blockToMergeIndex].transform.position.x,
+                    GameplayConfiguration.instance.BlocksMergeSpeed)
                 .SetEase(Ease.Linear));
-            seq.Insert(0, defenderBlock.transform.DOMoveY(selectedBlocks[blockToMergeIndex].transform.position.y, GameplayConfiguration.instance.BlocksMergeSpeed)
+            seq.Insert(0, defenderBlock.transform.DOMoveY(selectedBlocks[blockToMergeIndex].transform.position.y,
+                    GameplayConfiguration.instance.BlocksMergeSpeed)
                 .SetEase(Ease.Linear));
-            seq.Insert(0, defenderBlock.transform.DOMoveZ(posZ - 1f, GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
+            seq.Insert(0, defenderBlock.transform
+                .DOMoveZ(posZ - 1f, GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
                 .SetEase(Ease.InSine));
             seq.Insert(GameplayConfiguration.instance.BlocksMergeSpeed / 2f, defenderBlock.transform.DOMoveZ(posZ,
-                GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
+                    GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
                 .SetEase(Ease.OutSine));
             seq.Insert(0, defenderBlock.transform.DOScale(1.2f, GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
                 .SetEase(Ease.InSine));
             seq.Insert(GameplayConfiguration.instance.BlocksMergeSpeed / 2f, defenderBlock.transform.DOScale(1f,
-                GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
+                    GameplayConfiguration.instance.BlocksMergeSpeed / 2f)
                 .SetEase(Ease.OutSine));
             yield return new WaitForSeconds(GameplayConfiguration.instance.BlocksMergeSpeed - 0.05f);
 
@@ -206,6 +219,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
             {
                 defenderBlock.Setup(defenderBlock.Number + selectedBlocks[blockToMergeIndex].Number);
             }
+
             _blocks[pos.x, pos.y] = null;
 
             Messenger<Block>.Broadcast(Message.OnBlockMerged, selectedBlocks[blockToMergeIndex]);
@@ -254,7 +268,6 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         yield return new WaitForSeconds(0.1f);
         MoveNumbersDown();
         FillEmptyFields();
-
         SaveLevelData();
         yield return new WaitForSeconds(GameplayConfiguration.instance.BlocksFallTime + 0.1f);
 
@@ -337,23 +350,25 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
                 if (_blocks[x, y] == null)
                 {
                     Block block;
-                        if (minusBlockIndex == index && y > 0)
+                    if (minusBlockIndex == index && y > 0)
+                    {
+                        if (minusBlocksOnGrid >= 10 && defenderToMinusesRatio < 0.3f &&
+                            LevelManager.instance.CanSpawnMultiplier)
                         {
-                            if (minusBlocksOnGrid >= 10 && defenderToMinusesRatio < 0.3f && LevelManager.instance.CanSpawnMultiplier)
-                            {
-                                block = GetMultiplierBlock();
-                                LevelManager.instance.OnMultiplierSpawned();
-                            }
-                            else
-                            {
-                                block = GetMinusBlock();
-                                MinusBlocksGenerated++;
-                            }
+                            block = GetMultiplierBlock();
+                            LevelManager.instance.OnMultiplierSpawned();
                         }
                         else
                         {
-                            block = GetRandomBlock();
+                            block = GetMinusBlock();
+                            MinusBlocksGenerated++;
                         }
+                    }
+                    else
+                    {
+                        block = GetRandomBlock();
+                    }
+
                     block.transform.SetParent(this.transform);
                     block.transform.position = _positions[x, y] + Vector3.up * 4;
                     _blocks[x, y] = block;
@@ -399,6 +414,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
     }
 
     #region Level Creation
+
     public void GenerteGridRandom()
     {
         transform.position = Vector3.zero;
@@ -422,7 +438,9 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
                 {
                     block = GetRandomBlock();
                 }
-                Vector3 point = new Vector3(x * GameplayConfiguration.instance.CellSize.x, y * GameplayConfiguration.instance.CellSize.y, transform.position.z);
+
+                Vector3 point = new Vector3(x * GameplayConfiguration.instance.CellSize.x,
+                    y * GameplayConfiguration.instance.CellSize.y, transform.position.z);
                 _positions[x, y] = point;
                 _blocks[x, y] = block;
                 _blocks[x, y].Position = new Vector2Int(x, y);
@@ -433,8 +451,8 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 
         transform.position = Vector3.zero - CalculateCentroid() + Vector3.down * 0.5f;
         for (int x = 0; x < gridSize.x; x++)
-            for (int y = 0; y < gridSize.y; y++)
-                _positions[x, y] = _blocks[x, y].transform.position;
+        for (int y = 0; y < gridSize.y; y++)
+            _positions[x, y] = _blocks[x, y].transform.position;
     }
 
     internal void GenerteGridFromData(LevelData levelData)
@@ -473,7 +491,8 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
                 block.Setup(tile.Value);
             }
 
-            Vector3 point = new Vector3(x * GameplayConfiguration.instance.CellSize.x, y * GameplayConfiguration.instance.CellSize.y, transform.position.z);
+            Vector3 point = new Vector3(x * GameplayConfiguration.instance.CellSize.x,
+                y * GameplayConfiguration.instance.CellSize.y, transform.position.z);
             _positions[x, y] = point;
             _blocks[x, y] = block;
             _blocks[x, y].Position = new Vector2Int(x, y);
@@ -485,8 +504,8 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 
         transform.position = Vector3.zero - CalculateCentroid() + Vector3.down * 0.5f;
         for (int x = 0; x < gridSize.x; x++)
-            for (int y = 0; y < gridSize.y; y++)
-                _positions[x, y] = _blocks[x, y].transform.position;
+        for (int y = 0; y < gridSize.y; y++)
+            _positions[x, y] = _blocks[x, y].transform.position;
     }
 
 
@@ -494,5 +513,6 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
     {
         transform.BB_DestroyAllChildren();
     }
+
     #endregion
 }

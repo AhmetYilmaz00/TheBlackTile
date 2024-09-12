@@ -40,7 +40,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     {
         _debugPlaytime += Time.deltaTime;
 
-        if(GameManager.instance.GameState != GameState.Gameplay)
+        if (GameManager.instance.GameState != GameState.Gameplay)
             return;
 
         CanSpawnMultiplier = _multiplierTimer.Passed();
@@ -57,6 +57,7 @@ public class LevelManager : SingletonBehaviour<LevelManager>
     }
 
     #region Level Generation
+
     public void GenerateLevel()
     {
         GridManager.instance.GenerteGridRandom();
@@ -77,5 +78,6 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
         GridManager.instance.DestroyCurrentLevel();
     }
+
     #endregion
 }
