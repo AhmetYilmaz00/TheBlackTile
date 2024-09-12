@@ -4,27 +4,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using Elympics;
 using NaughtyAttributes;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
+
     public PlayerProgress Progress;
 
 
     private GameState _previousGameState;
-    public GameState PreviousGameState { get { return _previousGameState; } }
 
-    [ReadOnly][SerializeField] private GameState _gameState;
+    public GameState PreviousGameState
+    {
+        get { return _previousGameState; }
+    }
+
+    [ReadOnly] [SerializeField] private GameState _gameState;
 
     public LevelData CurrentLevelData;
 
 
     public GameState GameState
     {
-        get
-        {
-            return _gameState;
-        }
+        get { return _gameState; }
         private set
         {
             _previousGameState = _gameState;
@@ -58,7 +61,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             StartCoroutine(StartLevelFromLevelData(Progress.levelData));
         }
-        else if(!Progress.tutorialDone)
+        else if (!Progress.tutorialDone)
         {
             GameState = GameState.Tutorial;
             TutorialManager.instance.StartTutorial();
@@ -96,7 +99,6 @@ public class GameManager : SingletonBehaviour<GameManager>
         yield return null;
 
         GameState = GameState.Gameplay;
-
     }
 
     private void LoadLevel()
@@ -131,7 +133,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         Progress.isLevelDataSaved = false;
         Progress.levelData = null;
 
-        if(GuiGameplayPanel.instance.Score > Progress.highScore)
+        if (GuiGameplayPanel.instance.Score > Progress.highScore)
             Progress.highScore = GuiGameplayPanel.instance.Score;
 
         GameState = GameState.GameOverLose;
