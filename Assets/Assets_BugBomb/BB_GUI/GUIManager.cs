@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Events;
 using UnityEngine;
 
 public class GUIManager : SingletonBehaviour<GUIManager>
 {
     public List<GUIScreen> AllOpenedUIScreens;
-
+    public SingletonGameEvent onLoadedGameSceneUI;
     private GUIScreenType _currentOpenScreen;
 
     private void OnEnable()
@@ -29,6 +30,7 @@ public class GUIManager : SingletonBehaviour<GUIManager>
                 break;
             case GameState.Gameplay:
                 OpenOverlayScreen(GUIScreenType.Gameplay);
+                onLoadedGameSceneUI.Raise();
                 break;
             case GameState.Pause:
                 break;
@@ -41,6 +43,7 @@ public class GUIManager : SingletonBehaviour<GUIManager>
                 break;
         }
     }
+
     public void OpenOverlayScreen(GUIScreenType screenType)
     {
         RemoveGUIScreen(_currentOpenScreen);
