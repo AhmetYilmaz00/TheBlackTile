@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Code.AIM_Studio;
+using Elympics;
 using UnityEngine;
 
 public class InputManager : SingletonBehaviour<InputManager>
@@ -48,6 +49,7 @@ public class InputManager : SingletonBehaviour<InputManager>
         }
     }
 
+
     private void Update()
     {
         _playerInputControllerAim.inputMousePositionX = Input.mousePosition.x;
@@ -59,9 +61,33 @@ public class InputManager : SingletonBehaviour<InputManager>
         if (_gridManager.AnimationsPlaying)
             return;
 
-
-        if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverInputGetMouseDown)
+        if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
         {
+            Debug.Log(" _playerInputControllerAim.serverMouseButtonState == 2");
+            if (!_inputHeld)
+                return;
+
+
+            if (selectedBlocks.Count > 1)
+            {
+                _gridManager.DefenderBlock.SetSelected(false);
+                _gridManager.PerformMerge(selectedBlocks);
+            }
+            else
+            {
+                FeedbackManager.instance.BadFeedback();
+                for (int i = 0; i < selectedBlocks.Count; i++)
+                {
+                    selectedBlocks[i].SetSelected(false);
+                }
+            }
+
+            selectedBlocks[0].ClearNumberPreview();
+            selectedBlocks = new List<Block>();
+        }
+        else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverMouseButtonState == 1)
+        {
+            _playerInputControllerAim.serverMouseButtonState = 0;
             RaycastHit blockHit;
             if (_playerInputControllerAim.isServer)
             {
@@ -78,15 +104,6 @@ public class InputManager : SingletonBehaviour<InputManager>
             {
                 _inputHeld = false;
                 return;
-            }
-
-            if (!_playerInputControllerAim.isServer)
-            {
-                _playerInputControllerAim.inputGetMouseDown = true;
-            }
-            else
-            {
-                _playerInputControllerAim.serverInputGetMouseDown = false;
             }
 
             var selectedBlock = blockHit.collider.GetComponent<Block>();
@@ -178,43 +195,6 @@ public class InputManager : SingletonBehaviour<InputManager>
 
             if (selectedBlocks.Any())
                 selectedBlocks[0].SetupNumberPreviewOnly(selectedBlocks);
-        }
-        else if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverInputGetMouseUp)
-        {
-            if (!_inputHeld)
-                return;
-            if (!_playerInputControllerAim.isServer)
-            {
-                _playerInputControllerAim.inputGetMouseUp = true;
-            }
-            else
-            {
-                _playerInputControllerAim.serverInputGetMouseUp = false;
-            }
-
-            if (selectedBlocks.Count > 1)
-            {
-                _gridManager.DefenderBlock.SetSelected(false);
-                _gridManager.PerformMerge(selectedBlocks);
-            }
-            else
-            {
-                FeedbackManager.instance.BadFeedback();
-                for (int i = 0; i < selectedBlocks.Count; i++)
-                {
-                    selectedBlocks[i].SetSelected(false);
-                }
-            }
-
-            if (selectedBlocks.Count > 0)
-            {
-                selectedBlocks[0].ClearNumberPreview();
-                Debug.Log("selectedBlocks[0].ClearNumberPreview();");
-            }
-
-            Debug.Log("selectedBlocks.Count: " + selectedBlocks.Count);
-
-            selectedBlocks = new List<Block>();
         }
     }
 

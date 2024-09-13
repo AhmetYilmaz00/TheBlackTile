@@ -6,15 +6,17 @@ namespace Code.AIM_Studio
     public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IUpdatable, IInitializable
     {
         // Input'lar
-        public bool inputGetMouseDown;
+        /// <summary>
+        /// 0 = none, 1 = down, 2 = Up
+        /// </summary>
+        public int mouseButtonState;
+
         public bool inputGetMouse;
-        public bool inputGetMouseUp;
         public float inputMousePositionX;
         public float inputMousePositionY;
 
-        public bool serverInputGetMouseDown;
+        public int serverMouseButtonState;
         public bool serverInputGetMouse;
-        public bool serverInputGetMouseUp;
         public float serverInputMousePositionX;
         public float serverInputMousePositionY;
 
@@ -28,22 +30,29 @@ namespace Code.AIM_Studio
         public void OnInputForClient(IInputWriter inputSerializer)
         {
             // Mouse tıklaması, yatay hareket ve ateş etme input'larını yazıyoruz
-            inputSerializer.Write(inputGetMouseDown); // Mouse tıklaması
+            inputSerializer.Write(mouseButtonState); // Mouse tıklaması
             inputSerializer.Write(inputGetMouse); // Yatay hareket
-            inputSerializer.Write(inputGetMouseUp); // Ateş etme
             inputSerializer.Write(inputMousePositionX);
             inputSerializer.Write(inputMousePositionY);
-
-            inputGetMouseDown = false;
-            inputGetMouse = false;
-            inputGetMouseUp = false;
-            inputMousePositionX = 0;
-            inputMousePositionY = 0;
+            mouseButtonState = 0;
         }
 
         public void OnInputForBot(IInputWriter inputSerializer)
         {
-            // Bot için input verileri burada yazılabilir
+        }
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                mouseButtonState = 1;
+                //Log("Mouse Button Down Detected");
+            }
+            else if (Input.GetMouseButtonUp(0))
+            {
+                mouseButtonState = 2;
+                //Log("Mouse Button Up Detected");
+            }
         }
 
 
@@ -52,31 +61,24 @@ namespace Code.AIM_Studio
             if (Elympics.IsServer)
             {
                 // Verileri okuma
-                bool readInputMouseDown;
+                int readMouseButtonState;
                 bool readInputMouse;
-                bool readInputMouseUp;
                 float readInputMousePositionX;
                 float readInputMousePositionY;
 
                 if (ElympicsBehaviour.TryGetInput(ElympicsPlayer.FromIndex(0), out var inputReader))
                 {
                     // Verileri sırasıyla okuyoruz
-                    inputReader.Read(out readInputMouseDown); // Mouse tıklaması
+                    inputReader.Read(out readMouseButtonState); // Mouse tıklaması
                     inputReader.Read(out readInputMouse); // Yatay hareket
-                    inputReader.Read(out readInputMouseUp); // Ateş etme
                     inputReader.Read(out readInputMousePositionX); // Ateş etme
                     inputReader.Read(out readInputMousePositionY); // Ateş etme
 
-                    serverInputGetMouseDown = readInputMouseDown;
+                    serverMouseButtonState = readMouseButtonState;
+                    Debug.Log("serverMouseButtonState: "+serverMouseButtonState);
                     serverInputGetMouse = readInputMouse;
-                    serverInputGetMouseUp = readInputMouseUp;
                     serverInputMousePositionX = readInputMousePositionX;
                     serverInputMousePositionY = readInputMousePositionY;
-
-                    Debug.Log("serverInputGetMouseDown: " + serverInputGetMouseDown);
-                    Debug.Log("readInputMousePositionX: " + readInputMousePositionX);
-                    Debug.Log("readInputMousePositionY: " + readInputMousePositionY);
-                    Debug.Log("serverInputGetMouseUp: " + serverInputGetMouseUp);
                 }
             }
         }
