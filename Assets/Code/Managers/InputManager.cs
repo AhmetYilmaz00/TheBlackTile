@@ -82,7 +82,7 @@ public class InputManager : SingletonBehaviour<InputManager>
                 }
             }
 
-            selectedBlocks[0].ClearNumberPreview();
+            _gridManager.DefenderBlock.ClearNumberPreview();
             selectedBlocks = new List<Block>();
         }
         else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverMouseButtonState == 1)
