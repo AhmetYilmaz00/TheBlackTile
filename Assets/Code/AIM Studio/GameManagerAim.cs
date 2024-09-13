@@ -19,7 +19,7 @@ namespace Code.AIM_Studio
         public void Initialize()
         {
             timer.Value = timerDuration;
-            seedArray = new ElympicsArray<ElympicsInt>(34, () => new ElympicsInt());
+            seedArray = new ElympicsArray<ElympicsInt>(300, () => new ElympicsInt());
         }
 
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.AIM_Studio;
 using UnityEngine;
 
 public class InputManager : SingletonBehaviour<InputManager>
@@ -10,16 +11,18 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private LayerMask _blockLayerMask;
 
-    private List<Block> _selectedBlocks;
+    [SerializeField] private List<Block> selectedBlocks;
     private Block _lastSelected;
     private bool _inputHeld;
 
     private IGridManager _gridManager;
+    private PlayerInputControllerAim _playerInputControllerAim;
 
     private void Awake()
     {
         _blockLayerMask = LayerMask.GetMask(Layers.BLOCK);
         Messenger<GameState, GameState>.AddListener(Message.PreGameStateChange, OnGameStatePreChange);
+        _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
     }
 
     private void OnDisable()
@@ -31,15 +34,15 @@ public class InputManager : SingletonBehaviour<InputManager>
     {
         if (newGameState == GameState.Gameplay)
         {
-            _selectedBlocks = new List<Block>();
+            selectedBlocks = new List<Block>();
             _gridManager = GridManager.instance;
         }
-        else if(newGameState == GameState.Tutorial)
+        else if (newGameState == GameState.Tutorial)
         {
-            _selectedBlocks = new List<Block>();
+            selectedBlocks = new List<Block>();
             _gridManager = TutorialGridManager.instance;
         }
-        else if(newGameState == GameState.GameOverLose)
+        else if (newGameState == GameState.GameOverLose)
         {
             UpdateLineRenderer(new List<Block>());
         }
@@ -47,35 +50,64 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private void Update()
     {
-        if (GameManager.instance.GameState != GameState.Gameplay && GameManager.instance.GameState != GameState.Tutorial)
+        _playerInputControllerAim.inputMousePositionX = Input.mousePosition.x;
+        _playerInputControllerAim.inputMousePositionY = Input.mousePosition.y;
+        if (GameManager.instance.GameState != GameState.Gameplay &&
+            GameManager.instance.GameState != GameState.Tutorial)
             return;
 
-        if(_gridManager.AnimationsPlaying)
+        if (_gridManager.AnimationsPlaying)
             return;
 
-        if (Input.GetMouseButtonDown(0))
+
+        if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverInputGetMouseDown)
         {
-            RaycastHit blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+            RaycastHit blockHit;
+            if (_playerInputControllerAim.isServer)
+            {
+                blockHit = PerformRaycast(
+                    new Vector3(_playerInputControllerAim.serverInputMousePositionX,
+                        _playerInputControllerAim.serverInputMousePositionY, 0), _blockLayerMask);
+            }
+            else
+            {
+                blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+            }
+
             if (blockHit.collider == null)
             {
                 _inputHeld = false;
                 return;
             }
+
+            if (!_playerInputControllerAim.isServer)
+            {
+                _playerInputControllerAim.inputGetMouseDown = true;
+            }
+            else
+            {
+                _playerInputControllerAim.serverInputGetMouseDown = false;
+            }
+
             var selectedBlock = blockHit.collider.GetComponent<Block>();
 
-            if(selectedBlock.IsDefender || _gridManager.AreNeighbours(selectedBlock, _gridManager.DefenderBlock))
+            if (selectedBlock.IsDefender || _gridManager.AreNeighbours(selectedBlock, _gridManager.DefenderBlock))
             {
                 if (!selectedBlock.IsDefender)
                 {
-                    _selectedBlocks.Add(_gridManager.DefenderBlock);
+                    selectedBlocks.Add(_gridManager.DefenderBlock);
                     _gridManager.DefenderBlock.SetSelected(true);
                 }
-                _selectedBlocks.Add(selectedBlock);
-                selectedBlock.SetSelected(true);
-                _lastSelected = selectedBlock;
-                FeedbackManager.instance.LightFeedback();
-                UpdateLineRenderer();
-                _inputHeld = true;
+
+                if (!selectedBlocks.Contains(selectedBlock))
+                {
+                    selectedBlocks.Add(selectedBlock);
+                    selectedBlock.SetSelected(true);
+                    _lastSelected = selectedBlock;
+                    FeedbackManager.instance.LightFeedback();
+                    UpdateLineRenderer();
+                    _inputHeld = true;
+                }
             }
             else
             {
@@ -83,12 +115,24 @@ public class InputManager : SingletonBehaviour<InputManager>
                 _inputHeld = false;
             }
         }
-        else if(Input.GetMouseButton(0))
+        else if (Input.GetMouseButton(0) || _playerInputControllerAim.serverInputGetMouse)
         {
-            if(!_inputHeld)
+            if (!_inputHeld)
                 return;
 
-            RaycastHit blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+            RaycastHit blockHit;
+            if (_playerInputControllerAim.isServer)
+            {
+                blockHit = PerformRaycast(
+                    new Vector3(_playerInputControllerAim.serverInputMousePositionX,
+                        _playerInputControllerAim.serverInputMousePositionY, 0), _blockLayerMask);
+            }
+            else
+            {
+                _playerInputControllerAim.inputGetMouse = true;
+                blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+            }
+
             if (blockHit.collider == null)
                 return;
 
@@ -96,71 +140,87 @@ public class InputManager : SingletonBehaviour<InputManager>
             if (selectedBlock == _lastSelected)
                 return;
 
-            if (_selectedBlocks.Contains(selectedBlock))
+            if (selectedBlocks.Contains(selectedBlock))
             {
                 //przedostatni
-                if(_selectedBlocks.IndexOf(selectedBlock) == _selectedBlocks.Count - 2)
+                if (selectedBlocks.IndexOf(selectedBlock) == selectedBlocks.Count - 2)
                 {
-                    _selectedBlocks[_selectedBlocks.Count - 1].SetSelected(false);
-                    _selectedBlocks.RemoveAt(_selectedBlocks.Count - 1);
+                    selectedBlocks[selectedBlocks.Count - 1].SetSelected(false);
+                    selectedBlocks.RemoveAt(selectedBlocks.Count - 1);
                     _lastSelected = selectedBlock;
                     UpdateLineRenderer();
                     FeedbackManager.instance.LightFeedback();
 
-                    var firstAnimator = _selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
-                    for (int i = 0; i < _selectedBlocks.Count; i++)
+                    var firstAnimator = selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
+                    for (int i = 0; i < selectedBlocks.Count; i++)
                     {
-                        _selectedBlocks[i].Animator.Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
+                        selectedBlocks[i].Animator.Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
                     }
                 }
             }
             else
             {
-                if(_gridManager.AreNeighbours(selectedBlock, _lastSelected) && CanSelect(selectedBlock))
+                if (_gridManager.AreNeighbours(selectedBlock, _lastSelected) && CanSelect(selectedBlock))
                 {
                     selectedBlock.SetSelected(true);
-                    _selectedBlocks.Add(selectedBlock);
+                    selectedBlocks.Add(selectedBlock);
                     _lastSelected = selectedBlock;
                     UpdateLineRenderer();
                     FeedbackManager.instance.LightFeedback();
 
-                    var firstAnimator = _selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
-                    for (int i = 0; i < _selectedBlocks.Count; i++)
+                    var firstAnimator = selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
+                    for (int i = 0; i < selectedBlocks.Count; i++)
                     {
-                        _selectedBlocks[i].Animator.Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
+                        selectedBlocks[i].Animator.Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
                     }
                 }
             }
 
-            if(_selectedBlocks.Any())
-                _selectedBlocks[0].SetupNumberPreviewOnly(_selectedBlocks);
+            if (selectedBlocks.Any())
+                selectedBlocks[0].SetupNumberPreviewOnly(selectedBlocks);
         }
-        else if(Input.GetMouseButtonUp(0))
+        else if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverInputGetMouseUp)
         {
             if (!_inputHeld)
                 return;
+            if (!_playerInputControllerAim.isServer)
+            {
+                _playerInputControllerAim.inputGetMouseUp = true;
+            }
+            else
+            {
+                _playerInputControllerAim.serverInputGetMouseUp = false;
+            }
 
-            if(_selectedBlocks.Count > 1)
+            if (selectedBlocks.Count > 1)
             {
                 _gridManager.DefenderBlock.SetSelected(false);
-                _gridManager.PerformMerge(_selectedBlocks);
+                _gridManager.PerformMerge(selectedBlocks);
             }
             else
             {
                 FeedbackManager.instance.BadFeedback();
-                for (int i = 0; i < _selectedBlocks.Count; i++)
+                for (int i = 0; i < selectedBlocks.Count; i++)
                 {
-                    _selectedBlocks[i].SetSelected(false);
+                    selectedBlocks[i].SetSelected(false);
                 }
             }
-            _selectedBlocks[0].ClearNumberPreview();
-            _selectedBlocks = new List<Block>();
+
+            if (selectedBlocks.Count > 0)
+            {
+                selectedBlocks[0].ClearNumberPreview();
+                Debug.Log("selectedBlocks[0].ClearNumberPreview();");
+            }
+
+            Debug.Log("selectedBlocks.Count: " + selectedBlocks.Count);
+
+            selectedBlocks = new List<Block>();
         }
     }
 
     private void UpdateLineRenderer()
     {
-        UpdateLineRenderer(_selectedBlocks);
+        UpdateLineRenderer(selectedBlocks);
     }
 
     public void UpdateLineRenderer(List<Block> blocks)
@@ -185,11 +245,12 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private bool CanSelect(Block blockToSelect)
     {
-        if(_lastSelected.IsDefender || _lastSelected.IsMinusBlock || _lastSelected.IsMultiplier)
+        if (_lastSelected.IsDefender || _lastSelected.IsMinusBlock || _lastSelected.IsMultiplier)
             return true;
         else
-            return blockToSelect.Number == _lastSelected.Number || blockToSelect.Number == _lastSelected.Number + 1 
-                || blockToSelect.IsMinusBlock || blockToSelect.IsMultiplier;
+            return blockToSelect.Number == _lastSelected.Number || blockToSelect.Number == _lastSelected.Number + 1
+                                                                || blockToSelect.IsMinusBlock ||
+                                                                blockToSelect.IsMultiplier;
     }
 
     private RaycastHit PerformRaycast(Vector3 mousePos, LayerMask layerMask)
