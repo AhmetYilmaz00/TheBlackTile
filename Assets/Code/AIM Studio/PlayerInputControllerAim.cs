@@ -21,10 +21,12 @@ namespace Code.AIM_Studio
         public float serverInputMousePositionY;
 
         public bool isServer;
+        private InputManager _inputManager;
 
         public void Initialize()
         {
             isServer = Elympics.IsServer;
+            _inputManager = InputManager.instance;
         }
 
         public void OnInputForClient(IInputWriter inputSerializer)
@@ -43,6 +45,11 @@ namespace Code.AIM_Studio
 
         private void Update()
         {
+            if (_inputManager.inputWait)
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 mouseButtonState = 1;
@@ -75,7 +82,7 @@ namespace Code.AIM_Studio
                     inputReader.Read(out readInputMousePositionY); // Ateş etme
 
                     serverMouseButtonState = readMouseButtonState;
-                    Debug.Log("serverMouseButtonState: "+serverMouseButtonState);
+                    Debug.Log("serverMouseButtonState: " + serverMouseButtonState);
                     serverInputGetMouse = readInputMouse;
                     serverInputMousePositionX = readInputMousePositionX;
                     serverInputMousePositionY = readInputMousePositionY;

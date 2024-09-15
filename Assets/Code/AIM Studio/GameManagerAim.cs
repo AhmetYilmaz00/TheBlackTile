@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Elympics;
 using UnityEngine;
 
@@ -7,19 +8,22 @@ namespace Code.AIM_Studio
 {
     public class GameManagerAim : ElympicsMonoBehaviour, IUpdatable, IInitializable
     {
-        public int seedModifier;
         [SerializeField] private float timerDuration;
         [SerializeField] private DisplayManager displayManager;
         public ElympicsArray<ElympicsInt> seedArray = new();
+        public bool updateGridControlClient;
 
-        private ElympicsFloat timer = new ElympicsFloat();
+        public int currentHandBlocks = 0;
+        private ElympicsFloat timer = new();
         private int _seedCounter;
-        private List<int> seedArrayClient = new();
+        public List<int> seedArrayClient = new();
+        private bool _isServer;
 
         public void Initialize()
         {
             timer.Value = timerDuration;
-            seedArray = new ElympicsArray<ElympicsInt>(300, () => new ElympicsInt());
+            seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
+            _isServer = Elympics.IsServer;
         }
 
 
@@ -34,7 +38,7 @@ namespace Code.AIM_Studio
             }
             else if (Elympics.IsClient)
             {
-                  generatedSeed = seedArrayClient[_seedCounter];
+                generatedSeed = seedArrayClient[_seedCounter];
                 Debug.Log("Client tarafından belirlenen seed: " + generatedSeed);
             }
 
@@ -44,7 +48,26 @@ namespace Code.AIM_Studio
 
         public bool IsServer()
         {
-            return Elympics.IsServer;
+            return _isServer;
+        }
+
+        public void ClearAllData()
+        {
+            _seedCounter = 0;
+            if (IsServer())
+            {
+                for (int i = 0; i < seedArray.Values.Count; i++)
+                {
+                    seedArray.Values[i].Value = 0;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < seedArray.Values.Count; i++)
+                {
+                    seedArrayClient[i] = 0;
+                }
+            }
         }
 
         public void ElympicsUpdate()
@@ -58,11 +81,29 @@ namespace Code.AIM_Studio
                 }
 
                 GameManager.instance.StartLevel();
+                ClearAllData();
             }
+
+            Debug.Log("Deneme seedArray.Values.Count(x => x != 0): " + seedArray.Values.Count(x => x != 0));
+            Debug.Log("Deneme seedArrayClient.Count(x => x != 0): " + seedArrayClient.Count(x => x != 0));
+            Debug.Log("Deneme currentHandBlocks: " + currentHandBlocks);
+
 
             timer.Value -= Elympics.TickDuration;
             displayManager.DisplayTimer(timer.Value);
             if (timer.Value <= 0) EndGame();
+        }
+
+        public void RepairSeedArray()
+        {
+            seedArrayClient = new List<int>();
+            foreach (var value in seedArray.Values)
+            {
+                seedArrayClient.Add(value);
+                Debug.Log(value);
+            }
+
+            currentHandBlocks = 0;
         }
 
         private void EndGame()

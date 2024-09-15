@@ -118,9 +118,14 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
             number = -Mathf.RoundToInt(meanValue * sequenceLength);
         }
 
-        number = Mathf.RoundToInt(number * UnityEngine.Random.Range(
-            GameplayConfiguration.instance.DifficultyVariationPercentage.x,
-            GameplayConfiguration.instance.DifficultyVariationPercentage.y));
+        var rng = new Random(seed + _gameManagerAim.GetElympicsSeed());
+        float randomNumber =
+            (float)rng.NextDouble() * (GameplayConfiguration.instance.DifficultyVariationPercentage.y -
+                                       GameplayConfiguration.instance.DifficultyVariationPercentage.x) +
+            GameplayConfiguration.instance.DifficultyVariationPercentage.x;
+
+
+        number = Mathf.RoundToInt(number * randomNumber);
 
         block.Setup(number);
 
@@ -267,8 +272,23 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 
         yield return new WaitForSeconds(0.1f);
         MoveNumbersDown();
-        FillEmptyFields();
-        SaveLevelData();
+        if (!_gameManagerAim.IsServer())
+        {
+            InputManager.instance.inputWait = true;
+            yield return new WaitUntil(() =>
+                _gameManagerAim.currentHandBlocks > 0 && _gameManagerAim.seedArray.Values.Count(x => x != 0) > 0);
+            _gameManagerAim.RepairSeedArray();
+            FillEmptyFields();
+            SaveLevelData();
+            InputManager.instance.inputWait = false;
+            _gameManagerAim.ClearAllData();
+        }
+        else
+        {
+            FillEmptyFields();
+            SaveLevelData();
+        }
+
         yield return new WaitForSeconds(GameplayConfiguration.instance.BlocksFallTime + 0.1f);
 
         //CheckLoseCondition();
@@ -341,7 +361,11 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 
         float defenderToMinusesRatio = DefenderBlock.Number / minusBlocksSum;
 
-        int minusBlockIndex = UnityEngine.Random.Range(0, emptyFieldsCount);
+        var rng = new Random(seed + _gameManagerAim.GetElympicsSeed());
+        int number = rng.Next(0, emptyFieldsCount + 1);
+
+
+        int minusBlockIndex = number;
         int index = 0;
         for (int x = 0; x < _blocks.GetLength(0); x++)
         {

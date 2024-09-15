@@ -9,6 +9,8 @@ using UnityEngine;
 public class InputManager : SingletonBehaviour<InputManager>
 {
     public LineRenderer LineRenderer;
+    public bool inputWait;
+    private GameManagerAim _gameManagerAim;
 
     private LayerMask _blockLayerMask;
 
@@ -21,6 +23,7 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private void Awake()
     {
+        _gameManagerAim = FindObjectOfType<GameManagerAim>();
         _blockLayerMask = LayerMask.GetMask(Layers.BLOCK);
         Messenger<GameState, GameState>.AddListener(Message.PreGameStateChange, OnGameStatePreChange);
         _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
@@ -60,6 +63,10 @@ public class InputManager : SingletonBehaviour<InputManager>
 
         if (_gridManager.AnimationsPlaying)
             return;
+        if (inputWait)
+        {
+            return;
+        }
 
         if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
         {
@@ -71,6 +78,7 @@ public class InputManager : SingletonBehaviour<InputManager>
             if (selectedBlocks.Count > 1)
             {
                 _gridManager.DefenderBlock.SetSelected(false);
+                _gameManagerAim.currentHandBlocks = selectedBlocks.Count;
                 _gridManager.PerformMerge(selectedBlocks);
             }
             else
@@ -94,6 +102,8 @@ public class InputManager : SingletonBehaviour<InputManager>
                 blockHit = PerformRaycast(
                     new Vector3(_playerInputControllerAim.serverInputMousePositionX,
                         _playerInputControllerAim.serverInputMousePositionY, 0), _blockLayerMask);
+
+                _gameManagerAim.ClearAllData();
             }
             else
             {
@@ -194,7 +204,16 @@ public class InputManager : SingletonBehaviour<InputManager>
             }
 
             if (selectedBlocks.Any())
-                selectedBlocks[0].SetupNumberPreviewOnly(selectedBlocks);
+            {
+                if (selectedBlocks[0] == _gridManager.DefenderBlock)
+                {
+                    selectedBlocks[0].SetupNumberPreviewOnly(selectedBlocks);
+                }
+                else
+                {
+                    selectedBlocks.Clear();
+                }
+            }
         }
     }
 
