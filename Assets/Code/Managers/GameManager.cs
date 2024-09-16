@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Code.AIM_Studio;
+using Code.GUI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;

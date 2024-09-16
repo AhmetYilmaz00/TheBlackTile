@@ -952,11 +952,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d889593f82a004c9298f05010bdc99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seedModifier: 0
   timerDuration: 180
   displayManager: {fileID: 811343014}
   seedArray:
     values: []
+  updateGridControlClient: 0
+  currentHandBlocks: 0
+  seedArrayClient: 
 --- !u!114 &811343012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1054,7 +1056,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 411fa2b16fef7a2418c0d74022e95627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputGetMouseDown: 0
+  mouseButtonState: 0
+  inputGetMouse: 0
+  inputMousePositionX: 0
+  inputMousePositionY: 0
+  serverMouseButtonState: 0
+  serverInputGetMouse: 0
+  serverInputMousePositionX: 0
+  serverInputMousePositionY: 0
+  isServer: 0
 --- !u!1 &908858658
 GameObject:
   m_ObjectHideFlags: 0
@@ -2245,6 +2255,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   LineRenderer: {fileID: 1216840268}
+  inputWait: 0
+  selectedBlocks: []
 --- !u!1 &1771187616
 GameObject:
   m_ObjectHideFlags: 0
