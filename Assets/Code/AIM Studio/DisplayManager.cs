@@ -9,11 +9,12 @@ namespace Code.AIM_Studio
     public class DisplayManager : MonoBehaviour
     {
         [SerializeField] private Color textRedColor;
+        [SerializeField] private TMP_Text finalScoreText;
+        [SerializeField] private GameObject gameOverScreen;
 
         private TMP_Text _timerText;
         private bool _isStartRedTime;
 
-   
 
         public void FindTimerText()
         {
@@ -38,7 +39,7 @@ namespace Code.AIM_Studio
                 {
                     _isStartRedTime = true;
                     var dropShadowFilter = _timerText.GetComponent<DropShadowFilter>();
-                    
+
                     _timerText.color = textRedColor;
                     dropShadowFilter.enabled = true;
                     DOTween.To(() => dropShadowFilter.Blur, x => dropShadowFilter.Blur = x, 30, 0.5f)

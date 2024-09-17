@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Elympics;
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 namespace Code.AIM_Studio
 {
     public class GameManagerAim : ElympicsMonoBehaviour, IUpdatable, IInitializable
     {
+        public ElympicsInt score;
+
+
         [SerializeField] private float timerDuration;
         [SerializeField] private DisplayManager displayManager;
         public ElympicsArray<ElympicsInt> seedArray = new();
@@ -16,8 +20,10 @@ namespace Code.AIM_Studio
         public int currentHandBlocks = 0;
         private ElympicsFloat timer = new();
         private int _seedCounter;
+
         public List<int> seedArrayClient = new();
         private bool _isServer;
+        private bool _isFinishGame;
 
         public void Initialize()
         {
@@ -89,9 +95,17 @@ namespace Code.AIM_Studio
             Debug.Log("Deneme currentHandBlocks: " + currentHandBlocks);
 
 
-            timer.Value -= Elympics.TickDuration;
-            displayManager.DisplayTimer(timer.Value);
-            if (timer.Value <= 0) EndGame();
+            if (timer.Value <= 0 && !_isFinishGame)
+            {
+                timer.Value = 0;
+                _isFinishGame = true;
+                EndGame();
+            }
+            else if (timer.Value > 0)
+            {
+                timer.Value -= Elympics.TickDuration;
+                displayManager.DisplayTimer(timer.Value);
+            }
         }
 
         public void RepairSeedArray()
@@ -108,6 +122,12 @@ namespace Code.AIM_Studio
 
         private void EndGame()
         {
+            if (Elympics.IsServer)
+            {
+                Elympics.EndGame();
+            }
+
+            GameManager.instance.OnLevelLose();
         }
     }
 }

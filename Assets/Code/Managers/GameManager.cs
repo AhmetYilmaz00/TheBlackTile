@@ -1,14 +1,9 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using Code.AIM_Studio;
 using Code.GUI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using DG.Tweening;
-using Elympics;
-using Events;
-using NaughtyAttributes;
+using Sirenix.OdinInspector;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
@@ -23,7 +18,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         get { return _previousGameState; }
     }
 
-    [ReadOnly] [SerializeField] private GameState _gameState;
+    [NaughtyAttributes.ReadOnly] [SerializeField] private GameState _gameState;
 
     public LevelData CurrentLevelData;
 
@@ -35,6 +30,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             _previousGameState = _gameState;
             Messenger<GameState, GameState>.Broadcast(Message.PreGameStateChange, value, _previousGameState);
+            Debug.Log("_previousGameState: "+_previousGameState);
             _gameState = value;
             Messenger<GameState, GameState>.Broadcast(Message.PostGameStateChange, _gameState, _previousGameState);
 
@@ -134,13 +130,13 @@ public class GameManager : SingletonBehaviour<GameManager>
         GoToMenu();
     }
 
-    public void OnLevelLose()
+    public void OnLevelLose()       
     {
         Progress.isLevelDataSaved = false;
         Progress.levelData = null;
 
-        if (GuiGameplayPanel.instance.Score > Progress.highScore)
-            Progress.highScore = GuiGameplayPanel.instance.Score;
+        // if (GuiGameplayPanel.instance.Score > Progress.highScore)
+        //     Progress.highScore = GuiGameplayPanel.instance.Score;
 
         GameState = GameState.GameOverLose;
     }

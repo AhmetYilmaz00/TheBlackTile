@@ -651,6 +651,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6890589296193887105, guid: cd3bbcda16107e442879beee1c456631, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 255
+      objectReference: {fileID: 0}
     - target: {fileID: 6890589296193887106, guid: cd3bbcda16107e442879beee1c456631, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -804,7 +808,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 255
 --- !u!114 &641226382
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,6 +956,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82d889593f82a004c9298f05010bdc99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  score:
+    currentValue: 0
   timerDuration: 180
   displayManager: {fileID: 811343014}
   seedArray:
@@ -1016,6 +1022,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textRedColor: {r: 0.8392157, g: 0.12941177, b: 0.12941177, a: 1}
+  finalScoreText: {fileID: 0}
+  gameOverScreen: {fileID: 0}
 --- !u!114 &811343015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1169,7 +1177,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &992446768
 Transform:
   m_ObjectHideFlags: 0

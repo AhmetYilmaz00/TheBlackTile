@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Code.AIM_Studio;
 using TMPro;
@@ -25,10 +26,21 @@ namespace Code.GUI
         public float FeedbackAnimTime;
 
         public bool AnimsInProgress { get; private set; }
-        public int Score { get; private set; }
+
+        public int Score
+        {
+            get => _gameManagerAim.score.Value;
+            private set => _gameManagerAim.score.Value = value;
+        }
 
         private int _bestScore;
         private int _multiplier;
+        private GameManagerAim _gameManagerAim;
+
+        private void Awake()
+        {
+            _gameManagerAim = FindObjectOfType<GameManagerAim>();
+        }
 
         private void OnEnable()
         {
