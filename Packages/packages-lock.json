@@ -5,7 +5,16 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "461b5c0b935497c06d771eb3baf4aaa67a060aab"
+      "hash": "382f14537f50af6f48b3b1bceb9e62cd0963a1c1"
+    },
+    "com.daftmobile.external-communicator": {
+      "version": "https://github.com/Elympics/unity-lobby.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.daftmobile.elympics": "0.13.1"
+      },
+      "hash": "bb3bcf68c2e38ae6e0ce56ff799c28aaeb5e880d"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -71,8 +80,8 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "3.0.2",
-      "depth": 2,
+      "version": "3.2.1",
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"

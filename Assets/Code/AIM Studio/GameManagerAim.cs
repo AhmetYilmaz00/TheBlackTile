@@ -124,7 +124,8 @@ namespace Code.AIM_Studio
         {
             if (Elympics.IsServer)
             {
-                Elympics.EndGame();
+                Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData>
+                    { new ResultMatchPlayerData { MatchmakerData = new float[1] { score.Value } } }));
             }
 
             GameManager.instance.OnLevelLose();
