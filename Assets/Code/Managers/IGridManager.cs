@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 
-internal interface IGridManager
+namespace Code.Managers
 {
-    bool AnimationsPlaying { get; }
-    Block DefenderBlock { get; }
+    internal interface IGridManager
+    {
+        public bool AnimationsPlaying { get; }
+        Block DefenderBlock { get; }
 
-    bool AreNeighbours(Block selectedBlock, Block defenderBlock);
-    void PerformMerge(List<Block> selectedBlocks);
+        bool AreNeighbours(Block selectedBlock, Block defenderBlock);
+        void PerformMerge(List<Block> selectedBlocks);
+    }
 }

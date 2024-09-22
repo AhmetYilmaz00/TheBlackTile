@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Bugbomb
+  companyName: Aim Studio
   productName: The Black Tile
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -44,8 +44,8 @@ PlayerSettings:
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1920
   defaultScreenHeight: 1080
-  defaultScreenWidthWeb: 960
-  defaultScreenHeightWeb: 600
+  defaultScreenWidthWeb: 1080
+  defaultScreenHeightWeb: 1920
   m_StereoRenderingPath: 0
   m_ActiveColorSpace: 1
   unsupportedMSAAFallback: 0
@@ -137,7 +137,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.12
+  bundleVersion: 0.17
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -818,7 +818,7 @@ PlayerSettings:
     PS4: UNITY_POST_PROCESSING_STACK_V2
     PS5: UNITY_POST_PROCESSING_STACK_V2
     Stadia: UNITY_POST_PROCESSING_STACK_V2
-    Standalone: UNITY_POST_PROCESSING_STACK_V2
+    Standalone: UNITY_POST_PROCESSING_STACK_V2;ODIN_INSPECTOR;ODIN_INSPECTOR_3
     WebGL: ODIN_INSPECTOR;ODIN_INSPECTOR_3;UNITY_POST_PROCESSING_STACK_V2;UIFX_TMPRO
     Windows Store Apps: UNITY_POST_PROCESSING_STACK_V2
     XboxOne: UNITY_POST_PROCESSING_STACK_V2
@@ -827,6 +827,7 @@ PlayerSettings:
   platformArchitecture: {}
   scriptingBackend:
     Android: 1
+    Server: 0
     Standalone: 0
   il2cppCompilerConfiguration: {}
   managedStrippingLevel:

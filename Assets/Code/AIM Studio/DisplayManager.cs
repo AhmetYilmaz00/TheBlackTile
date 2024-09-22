@@ -1,8 +1,12 @@
 using System;
 using ChocDino.UIFX;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
+using Elympics;
+using ElympicsLobbyPackage;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Code.AIM_Studio
 {
@@ -11,7 +15,6 @@ namespace Code.AIM_Studio
         [SerializeField] private Color textRedColor;
         [SerializeField] private TMP_Text finalScoreText;
         [SerializeField] private GameObject gameOverScreen;
-
         private TMP_Text _timerText;
         private bool _isStartRedTime;
 
@@ -46,6 +49,35 @@ namespace Code.AIM_Studio
                         .SetLoops(-1, LoopType.Yoyo)
                         .SetEase(Ease.InOutSine);
                 }
+            }
+        }
+
+        public void ReturnToLobbyButtonOnClick()
+        {
+            ReturnToLobby().Forget();
+        }
+
+        private async UniTask ReturnToLobby()
+        {
+            await SceneManager.LoadSceneAsync(0);
+            ElympicsExternalCommunicator.Instance.gameObject.GetComponent<PersistentLobbyManager>()
+                .SetAppState(PersistentLobbyManager.AppState.Lobby);
+        }
+
+        public async void DisplayRespect(TextMeshProUGUI respectText)
+        {
+            if (!ElympicsLobbyClient.Instance.IsAuthenticated)
+            {
+                respectText.text = "Log in to earn respect";
+            }
+            else
+            {
+                RespectService respectService = new RespectService(ElympicsLobbyClient.Instance, ElympicsConfig.Load());
+                var matchID = ElympicsLobbyClient.Instance.RoomsManager.ListJoinedRooms()[0].State.MatchmakingData!
+                    .MatchData!.MatchId;
+                var respectValue = await respectService.GetRespectForMatch(matchID);
+
+                respectText.text = "Respect earned: " + respectValue.Respect.ToString();
             }
         }
     }

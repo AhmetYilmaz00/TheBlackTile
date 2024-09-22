@@ -12,9 +12,9 @@
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.daftmobile.elympics": "0.13.1"
+        "com.daftmobile.elympics": "0.13.3"
       },
-      "hash": "bb3bcf68c2e38ae6e0ce56ff799c28aaeb5e880d"
+      "hash": "ee3d328106b24220d521090d03683f48ce619b1c"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",

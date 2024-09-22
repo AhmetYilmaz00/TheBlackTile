@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.AIM_Studio;
 using Code.GUI;
+using Code.Managers;
 using UnityEngine;
 using Random = System.Random;
 
@@ -16,7 +17,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
 
     public int MaxValue => StartingMaxValue + MinusBlocksGenerated / 7;
     public Block DefenderBlock { get; private set; }
-    public bool AnimationsPlaying { get; private set; }
+    public bool AnimationsPlaying { get; set; }
     public int MinusBlocksGenerated;
 
     private Block[,] _blocks;

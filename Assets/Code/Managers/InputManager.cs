@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Code.AIM_Studio;
+using Code.Managers;
 using Elympics;
 using UnityEngine;
 
@@ -62,7 +63,10 @@ public class InputManager : SingletonBehaviour<InputManager>
             return;
 
         if (_gridManager.AnimationsPlaying)
+        {
+            Debug.Log("_gridManager.AnimationsPlaying: RETURN");
             return;
+        }
         if (inputWait)
         {
             return;

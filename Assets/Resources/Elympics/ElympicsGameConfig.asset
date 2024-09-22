@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameName: The Black Tile
   gameId: 62e5b16e-36fd-4238-a3e5-a34400c712dc
-  gameVersion: 2
+  gameVersion: 17
   players: 2
   gameplayScene: Assets/Scenes/Main.unity
   gameplaySceneAsset: {fileID: 102900000, guid: e16408446b727e14d86caf0a79e9a2dd, type: 3}
@@ -39,7 +39,7 @@ MonoBehaviour:
   prediction: 1
   predictionLimitInTicks: 8
   detailedNetworkLog: 0
-  mode: 1
+  mode: 2
   halfRemoteMode: 0
   ipForHalfRemoteMode: 127.0.0.1
   tcpPortForHalfRemoteMode: 9101
@@ -49,13 +49,13 @@ MonoBehaviour:
     queueName: 
     regionName: 
   testPlayers:
-  - userId: 
+  - userId: 0
     isBot: 0
     botDifficulty: 0
     gameEngineData: 
     matchmakerData: []
   - userId: 1
-    isBot: 1
+    isBot: 0
     botDifficulty: 0
     gameEngineData: 
     matchmakerData: []

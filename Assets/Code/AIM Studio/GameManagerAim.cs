@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Elympics;
+using ElympicsLobbyPackage;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
 
 namespace Code.AIM_Studio
 {
@@ -30,6 +30,13 @@ namespace Code.AIM_Studio
             timer.Value = timerDuration;
             seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
             _isServer = Elympics.IsServer;
+
+            if (Elympics.IsClient)
+            {
+                if (ElympicsExternalCommunicator.Instance != null)
+                    ElympicsExternalCommunicator.Instance.gameObject.GetComponent<PersistentLobbyManager>()
+                        .SetAppState(PersistentLobbyManager.AppState.Gameplay);
+            }
         }
 
 
@@ -129,6 +136,10 @@ namespace Code.AIM_Studio
             }
 
             GameManager.instance.OnLevelLose();
+            if (Elympics.IsClient)
+            {
+                ElympicsExternalCommunicator.Instance.GameStatusCommunicator.GameFinished(score.Value);
+            }
         }
     }
 }

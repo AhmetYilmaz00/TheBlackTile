@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Array2DEditor;
+using Code.Managers;
 
 public class TutorialGridManager : SingletonBehaviour<TutorialGridManager>, IGridManager
 {
@@ -13,7 +14,7 @@ public class TutorialGridManager : SingletonBehaviour<TutorialGridManager>, IGri
     public Array2DString SecondBlocks;
     public Array2DString ThirdBlocks;
 
-    public bool AnimationsPlaying { get; private set; }
+    public bool AnimationsPlaying { get;  set; }
 
     public Block DefenderBlock { get; private set; }
 

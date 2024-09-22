@@ -1,3 +1,4 @@
+using System;
 using Elympics;
 using UnityEngine;
 
@@ -22,6 +23,11 @@ namespace Code.AIM_Studio
 
         public bool isServer;
         private InputManager _inputManager;
+
+        private void Start()
+        {
+            _inputManager = InputManager.instance;
+        }
 
         public void Initialize()
         {
