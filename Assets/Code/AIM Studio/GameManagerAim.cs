@@ -25,12 +25,20 @@ namespace Code.AIM_Studio
         private bool _isServer;
         private bool _isFinishGame;
 
+
+        private void Start()
+        {
+            Debug.Log("GameManagerAimStart");
+            Debug.Log("Start Elympics.IsClient=" + Elympics.IsClient);
+
+        }
+
         public void Initialize()
         {
             timer.Value = timerDuration;
             seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
             _isServer = Elympics.IsServer;
-
+            Debug.Log("Elympics.IsClient=" + Elympics.IsClient);
             if (Elympics.IsClient)
             {
                 if (ElympicsExternalCommunicator.Instance != null)

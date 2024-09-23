@@ -1,7 +1,7 @@
 {
   "dependencies": {
-    "com.daftmobile.elympics": "https://github.com/Elympics/Unity-SDK.git",
-    "com.daftmobile.external-communicator": "https://github.com/Elympics/unity-lobby.git",
+    "com.daftmobile.elympics": "https://github.com/Elympics/Unity-SDK.git#v0.12.0",
+    "com.daftmobile.external-communicator": "https://github.com/Elympics/unity-lobby.git#v0.2.5",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.collab-proxy": "2.4.4",
     "com.unity.ide.rider": "3.0.31",

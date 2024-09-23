@@ -1165,6 +1165,38 @@ PrefabInstance:
       propertyPath: m_HorizontalAlignment
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -16.519985
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8971760073020543367, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 8.260008
+      objectReference: {fileID: 0}
     - target: {fileID: 8971760073037618312, guid: 4bef6041548134282abca4cb00f403d4, type: 3}
       propertyPath: m_Name
       value: PlayButton

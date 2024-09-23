@@ -31,11 +31,6 @@ namespace Code.AIM_Studio
         private string playQueue = "training:";
         private string leaderboardQueue;
 
-        private void Awake()
-        {
-            Debug.Log("DENEME");
-        }
-
         public void SetPersistantLobbyManager(PersistentLobbyManager newValue) => _persistentLobbyManager = newValue;
 
         public void SetAuthenticationScreenActive(bool newValue) => authenticationInProgressScreen.SetActive(newValue);
@@ -44,6 +39,7 @@ namespace Code.AIM_Studio
         {
             Capabilities capabilities = sessionManager.CurrentSession.Value.Capabilities;
             var currentAuthType = ElympicsLobbyClient.Instance.AuthData.AuthType;
+            Debug.Log("currentAuthType=" + currentAuthType);
             bool isGuest = currentAuthType is AuthType.ClientSecret or AuthType.None;
 
             playButtonText.text = isGuest ? "Train now" : "Play now";
@@ -59,7 +55,12 @@ namespace Code.AIM_Studio
             }
 
             playerEthAddress.gameObject.SetActive(!isGuest && !capabilities.IsTelegram());
-            connectWalletButton.SetActive((capabilities.IsEth() || capabilities.IsTon()) && !isGuest);
+
+            Debug.Log("capabilities.IsEth() :" + capabilities.IsEth());
+            Debug.Log("capabilities.IsTon() :" + capabilities.IsTon());
+            Debug.Log("isGuest :" + isGuest);
+
+            connectWalletButton.SetActive(capabilities.IsEth() || capabilities.IsTon() && isGuest);
             playQueue = currentAuthType switch
             {
                 AuthType.Telegram => "telegram",
@@ -109,11 +110,11 @@ namespace Code.AIM_Studio
             authenticationInProgressScreen.SetActive(true);
         }
 
-        async public void PlayGame()
+        public void PlayGame()
         {
+            ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(playQueue);
             _persistentLobbyManager.SetAppState(PersistentLobbyManager.AppState.Matchmaking);
             matchmakingInProgressScreen.SetActive(true);
-            await ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(playQueue);
         }
 
         public void ShowAccountInfo()

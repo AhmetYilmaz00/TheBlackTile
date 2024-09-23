@@ -1,20 +1,20 @@
 {
   "dependencies": {
     "com.daftmobile.elympics": {
-      "version": "https://github.com/Elympics/Unity-SDK.git",
+      "version": "https://github.com/Elympics/Unity-SDK.git#v0.12.0",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "382f14537f50af6f48b3b1bceb9e62cd0963a1c1"
+      "hash": "66adb6ca634700944914ce0f1abff420d1958e3b"
     },
     "com.daftmobile.external-communicator": {
-      "version": "https://github.com/Elympics/unity-lobby.git",
+      "version": "https://github.com/Elympics/unity-lobby.git#v0.2.5",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.daftmobile.elympics": "0.13.3"
+        "com.daftmobile.elympics": "0.11.0"
       },
-      "hash": "ee3d328106b24220d521090d03683f48ce619b1c"
+      "hash": "f37ccab469a840d30a2ed7ed1b46f47531502f25"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
