@@ -39,12 +39,12 @@ namespace Code.AIM_Studio
             seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
             _isServer = Elympics.IsServer;
             Debug.Log("Elympics.IsClient=" + Elympics.IsClient);
-            if (Elympics.IsClient)
-            {
-                if (ElympicsExternalCommunicator.Instance != null)
-                    ElympicsExternalCommunicator.Instance.gameObject.GetComponent<PersistentLobbyManager>()
-                        .SetAppState(PersistentLobbyManager.AppState.Gameplay);
-            }
+            // if (Elympics.IsClient)
+            // {
+            //     if (ElympicsExternalCommunicator.Instance != null)
+            //         ElympicsExternalCommunicator.Instance.gameObject.GetComponent<PersistentLobbyManager>()
+            //             .SetAppState(PersistentLobbyManager.AppState.Gameplay);
+            // }
         }
 
 

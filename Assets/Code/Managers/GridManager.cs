@@ -277,6 +277,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         if (!_gameManagerAim.IsServer())
         {
             InputManager.instance.inputWait = true;
+
             yield return new WaitUntil(() =>
                 _gameManagerAim.currentHandBlocks > 0 && _gameManagerAim.seedArray.Values.Count(x => x != 0) > 0);
             _gameManagerAim.RepairSeedArray();
