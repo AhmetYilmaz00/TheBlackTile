@@ -1,4 +1,5 @@
-﻿using DG.Tweening;
+﻿using System;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -277,6 +278,9 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         if (!_gameManagerAim.IsServer())
         {
             InputManager.instance.inputWait = true;
+            Debug.Log("Selami _gameManagerAim.currentHandBlocks: " + _gameManagerAim.currentHandBlocks);
+            Debug.Log("Selami _gameManagerAim.seedArray.Values.Count(x => x != 0): " +
+                      _gameManagerAim.seedArray.Values.Count(x => x != 0));
 
             yield return new WaitUntil(() =>
                 _gameManagerAim.currentHandBlocks > 0 && _gameManagerAim.seedArray.Values.Count(x => x != 0) > 0);
@@ -297,6 +301,12 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         //CheckLoseCondition();
 
         AnimationsPlaying = false;
+    }
+
+    private void Update()
+    {
+        Debug.Log("Selami _gameManagerAim.seedArray.Values.Count(x => x != 0): " +
+                  _gameManagerAim.seedArray.Values.Count(x => x != 0));
     }
 
     private void MoveNumbersDown()
@@ -363,7 +373,6 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         }
 
         float defenderToMinusesRatio = DefenderBlock.Number / minusBlocksSum;
-
         var rng = new Random(seed + _gameManagerAim.GetElympicsSeed());
         int number = rng.Next(0, emptyFieldsCount + 1);
 

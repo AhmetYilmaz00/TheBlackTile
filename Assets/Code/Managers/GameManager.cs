@@ -57,7 +57,7 @@ public class GameManager : SingletonBehaviour<GameManager>
 
         if (Progress.isLevelDataSaved && Progress.levelData.Score > 0)
         {
-            StartCoroutine(StartLevelFromLevelData(Progress.levelData));
+          //  StartCoroutine(StartLevelFromLevelData(Progress.levelData));
         }
         // else if (!Progress.tutorialDone)
         // {

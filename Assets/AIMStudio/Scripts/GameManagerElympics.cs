@@ -42,17 +42,11 @@ namespace AIMStudio.Scripts
 
         public GameState gameState;
 
-        public bool IsPlaying { get { return gameState == GameState.game; } }
+        public bool IsPlaying
+        {
+            get { return gameState == GameState.game; }
+        }
 
-        // public bool IsAnyTetrimoMoving
-        // {
-        //     get { return TetrimoSpawner.instance.spawnedTetrimos.Any(tetrimo => tetrimo.isMoving); }
-        // }
-        //
-        // public bool IsAnyTetrimoOnGrid
-        // {
-        //     get { return TetrimoSpawner.instance.spawnedTetrimos.Any(tetrimo => tetrimo != null && tetrimo.isOnGrid); }
-        // }
 
         public bool canPointerDown { get; set; } = true;
 
@@ -64,9 +58,10 @@ namespace AIMStudio.Scripts
         private int _playersNumber;
         private bool NotAllPlayersConnected => playersConnected.Count != _playersNumber;
 
-       // [SerializeField] private RandomManager randomManager;
+        [SerializeField] private RandomManager randomManager;
         private ElympicsFloat timeToStart = new ElympicsFloat(3);
         private Coroutine countdownSound;
+
         private void Awake()
         {
             GameStarted += () => Debug.Log("All players ready");
@@ -85,30 +80,30 @@ namespace AIMStudio.Scripts
                 countdownSound = StartCoroutine(CountDownSound());
             }
 
-        //    randomManager.InitializeRandom();
+            randomManager.InitializeRandom();
 
-          //  GUIManager.instance.gameOverGUI.Hide();
-           // GUIManager.instance.frontPage.SetActive(false);
+            GUIManagerElympics.instance.gameOverGUI.Hide();
+            GUIManagerElympics.instance.frontPage.SetActive(false);
 
             timeToStart.Value -= Elympics.TickDuration;
 
             if (timeToStart.Value > 0f)
             {
-              //  GUIManager.instance.countDownText.text = Mathf.Ceil(timeToStart.Value).ToString();
+                GUIManagerElympics.instance.countDownText.text = Mathf.Ceil(timeToStart.Value).ToString();
             }
 
             if (timeToStart.Value <= 0f)
             {
-              //  GUIManager.instance.countDownTextContainer.SetActive(false);
+                GUIManagerElympics.instance.countDownTextContainer.SetActive(false);
 
                 StartGame();
 
                 isReadyLocally = true;
 
-                if (Elympics.IsClient && countdownSound != null) 
+                if (Elympics.IsClient && countdownSound != null)
                 {
                     StopCoroutine(countdownSound);
-               //     SoundsManager.instance.PlayGameStartSound();
+                    SoundsManager.instance.PlayGameStartSound();
                     countdownSound = null;
                 }
             }
@@ -118,14 +113,14 @@ namespace AIMStudio.Scripts
         {
             while (!isReadyLocally)
             {
-             //   SoundsManager.instance.PlayCountdown0();
+                SoundsManager.instance.PlayCountdown0();
                 yield return new WaitForSecondsRealtime(1);
             }
         }
 
         public void OnServerInit(InitialMatchPlayerDatasGuid initialMatchPlayerDatas)
         {
-         //   randomManager.SetSeed(UnityEngine.Random.Range(1, 100000));
+            randomManager.SetSeed(UnityEngine.Random.Range(1, 100000));
             _playersNumber = initialMatchPlayerDatas.Count;
         }
 
@@ -158,20 +153,20 @@ namespace AIMStudio.Scripts
 
         public void ResetGame(bool resetScore = true)
         {
-          //  SoundsManager.instance.PlayGameStartSound();
+            SoundsManager.instance.PlayGameStartSound();
 
             if (resetScore)
             {
-            //    ScoreManager.instance.reset();
+                ScoreManager.instance.reset();
             }
 
-          //  GameGrid.instance.ClearGrid();
-          //  GameGrid.instance.RefreshGridCounters();
+            //   GameGrid.instance.ClearGrid();
+            //   GameGrid.instance.RefreshGridCounters();
 
-          //  TetrimoSpawner.instance.Reset();
+            //  TetrimoSpawner.instance.Reset();
 
-       //     GUIManager.instance.gameOverGUI.Hide();
-        //    GUIManager.instance.frontPage.SetActive(false);
+            GUIManagerElympics.instance.gameOverGUI.Hide();
+            GUIManagerElympics.instance.frontPage.SetActive(false);
         }
 
         public void GameOver(GameOverReason reason)
@@ -182,17 +177,18 @@ namespace AIMStudio.Scripts
             _elapsedMatchTime = Time.time - _elapsedMatchTime;
 
             gameState = GameState.gameover;
-         //   SoundsManager.instance.PlayGameOverSound();
+            SoundsManager.instance.PlayGameOverSound();
             GameEnded?.Invoke();
 
             if (Elympics.IsServer)
             {
-           //     Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData> { new ResultMatchPlayerData { MatchmakerData = new float[1] { ScoreManager.instance.score } } }));
+                Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData>
+                    { new ResultMatchPlayerData { MatchmakerData = new float[1] { ScoreManager.instance.score } } }));
             }
 
             if (reason != GameOverReason.Disconnect)
             {
-         //       GUIManager.instance.gameOverGUI.Show(reason);
+                GUIManagerElympics.instance.gameOverGUI.Show(reason);
             }
         }
 
