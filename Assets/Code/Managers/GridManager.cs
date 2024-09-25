@@ -303,11 +303,6 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         AnimationsPlaying = false;
     }
 
-    private void Update()
-    {
-        Debug.Log("Selami _gameManagerAim.seedArray.Values.Count(x => x != 0): " +
-                  _gameManagerAim.seedArray.Values.Count(x => x != 0));
-    }
 
     private void MoveNumbersDown()
     {

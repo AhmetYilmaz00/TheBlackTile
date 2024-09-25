@@ -48,24 +48,24 @@ namespace Code.GUI
             Messenger<List<Block>>.AddListener(Message.OnMergeMoveStarted, OnMergeMoveStarted);
 
             _bestScore = GameManager.instance.Progress.highScore;
-            if (GameManager.instance.Progress.isLevelDataSaved)
-            {
-                Score = GameManager.instance.Progress.levelData.Score;
-                ScoreText.text = Score.ToString();
-                if (Score > _bestScore)
-                {
-                    BestScoreText.text = ScoreText.text;
-                }
-                else
-                {
-                    BestScoreText.text = _bestScore.ToString();
-                }
-            }
-            else
-            {
+            // if (GameManager.instance.Progress.isLevelDataSaved)
+            // {
+            //     Score = GameManager.instance.Progress.levelData.Score;
+            //     ScoreText.text = Score.ToString();
+            //     if (Score > _bestScore)
+            //     {
+            //         BestScoreText.text = ScoreText.text;
+            //     }
+            //     else
+            //     {
+            //         BestScoreText.text = _bestScore.ToString();
+            //     }
+            // }
+            // else
+            // {
                 ScoreText.text = "0";
-                BestScoreText.text = _bestScore.ToString();
-            }
+            //     BestScoreText.text = _bestScore.ToString();
+            // }
 
             ScoreLabel.color = AssetsConfiguration.instance.ColorTheme.GuiColor_1;
             ScoreText.color = AssetsConfiguration.instance.ColorTheme.GuiColor_1;

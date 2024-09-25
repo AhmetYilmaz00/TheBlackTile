@@ -55,22 +55,21 @@ public class GameManager : SingletonBehaviour<GameManager>
         _gameState = GameState.Menu;
         GameState = GameState.Menu;
 
-        if (Progress.isLevelDataSaved && Progress.levelData.Score > 0)
-        {
+        
           //  StartCoroutine(StartLevelFromLevelData(Progress.levelData));
-        }
+        
         // else if (!Progress.tutorialDone)
         // {
         //     GameState = GameState.Tutorial;
         //     TutorialManager.instance.StartTutorial();
         // }
-        else
-        {
+       
+            Progress.levelData.Score = 0;
             if (gameManagerAim.IsServer())
             {
                 StartLevel();
             }
-        }
+        
     }
 
 

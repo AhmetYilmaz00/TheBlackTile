@@ -42,7 +42,6 @@ namespace Code.AIM_Studio
             inputSerializer.Write(inputGetMouse); // Yatay hareket
             inputSerializer.Write(inputMousePositionX);
             inputSerializer.Write(inputMousePositionY);
-            Debug.Log("inputSerializer: "+inputSerializer);
             mouseButtonState = 0;
         }
 
