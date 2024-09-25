@@ -1,4 +1,5 @@
-﻿using Code.AIM_Studio;
+﻿using AIMStudio.Scripts;
+using Code.AIM_Studio;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -20,16 +21,35 @@ namespace Code.GUI
         {
             _gameManagerAim = FindObjectOfType<GameManagerAim>();
             _displayManager = FindObjectOfType<DisplayManager>();
-            TryAgainButton.onClick.AddListener(Restart);
+            TryAgainButton.onClick.AddListener(OnSubmit);
             ScoreText.text = _gameManagerAim.score.Value.ToString();
-            _displayManager.DisplayRespect(respect_TMP);
+            if (ElympicsAuthenticationHandler.instance.IsGuest())
+            {
+                respect_TMP.text = "Please connect wallet to earn respect.";
+            }
+            else
+            {
+                _displayManager.DisplayRespect(respect_TMP);
+            }
             //  HighScoreText.text = GameManager.instance.Progress.highScore.ToString();
         }
-        
+
         private void Restart()
         {
             _displayManager.ReturnToLobbyButtonOnClick();
             //GameManager.instance.StartLevel();
+        }
+
+        public void OnSubmit()
+        {
+            //not sure if loading animation manager will work.
+            LoadingAnimationManager.instance.StartLoadingAnimation();
+
+            //Go back to main menu
+            ElympicsAuthenticationHandler.ReturningBack = true;
+            ElympicsAuthenticationHandler.InMatch = false;
+
+            SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
     }
 }

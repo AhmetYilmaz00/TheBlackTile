@@ -30,7 +30,6 @@ namespace Code.AIM_Studio
         {
             Debug.Log("GameManagerAimStart");
             Debug.Log("Start Elympics.IsClient=" + Elympics.IsClient);
-
         }
 
         public void Initialize()
@@ -98,14 +97,14 @@ namespace Code.AIM_Studio
                 foreach (var value in seedArray.Values)
                 {
                     seedArrayClient.Add(value);
-                    Debug.Log("value: " +value);
+                    Debug.Log("value: " + value);
                     Debug.Log(value);
                 }
 
                 GameManager.instance.StartLevel();
                 ClearAllData();
             }
-            
+
             if (timer.Value <= 0 && !_isFinishGame)
             {
                 timer.Value = 0;
@@ -137,6 +136,7 @@ namespace Code.AIM_Studio
             {
                 Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData>
                     { new ResultMatchPlayerData { MatchmakerData = new float[1] { score.Value } } }));
+                
             }
 
             GameManager.instance.OnLevelLose();
