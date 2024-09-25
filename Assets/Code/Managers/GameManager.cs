@@ -3,7 +3,6 @@ using System.Collections;
 using Code.AIM_Studio;
 using Code.GUI;
 using UnityEngine;
-using Sirenix.OdinInspector;
 
 public class GameManager : SingletonBehaviour<GameManager>
 {
@@ -118,7 +117,6 @@ public class GameManager : SingletonBehaviour<GameManager>
         GameState = GameState.Menu;
     }
 
-    [Button]
     public void OnLevelWin()
     {
         GameState = GameState.GameOverWin;

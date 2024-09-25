@@ -28,7 +28,7 @@ namespace Code.AIM_Studio
         private PersistentLobbyManager _persistentLobbyManager = null;
         private LeaderboardClient leaderboardClient;
 
-        private string playQueue = "training:";
+        private string playQueue = "eth";
         private string leaderboardQueue;
 
         public void SetPersistantLobbyManager(PersistentLobbyManager newValue) => _persistentLobbyManager = newValue;
@@ -37,40 +37,40 @@ namespace Code.AIM_Studio
 
         public void SetLobbyVariantUI(SessionManager sessionManager)
         {
-            Capabilities capabilities = sessionManager.CurrentSession.Value.Capabilities;
-            var currentAuthType = ElympicsLobbyClient.Instance.AuthData.AuthType;
-            Debug.Log("currentAuthType=" + currentAuthType);
-            bool isGuest = currentAuthType is AuthType.ClientSecret or AuthType.None;
-
-            playButtonText.text = isGuest ? "Train now" : "Play now";
-            playerAvatar.SetActive(!isGuest);
-            playerNickname.gameObject.SetActive(!isGuest);
-            if (!isGuest)
-            {
-                playerNickname.text = sessionManager.CurrentSession.Value.AuthData.Nickname;
-                if (!capabilities.IsTelegram())
-                {
-                    playerEthAddress.text = sessionManager.CurrentSession.Value.SignWallet;
-                }
-            }
-
-            playerEthAddress.gameObject.SetActive(!isGuest && !capabilities.IsTelegram());
-
-            Debug.Log("capabilities.IsEth() :" + capabilities.IsEth());
-            Debug.Log("capabilities.IsTon() :" + capabilities.IsTon());
-            Debug.Log("isGuest :" + isGuest);
-
-            connectWalletButton.SetActive(capabilities.IsEth() || capabilities.IsTon() && isGuest);
-            playQueue = currentAuthType switch
-            {
-                AuthType.Telegram => "telegram",
-                AuthType.EthAddress => "eth",
-                _ => "training",
-            };
-            leaderboardQueue = currentAuthType == AuthType.Telegram ? "telegram" : "eth";
-
-            CreateLeaderboardClient();
-            FetchLeaderboardEntries();
+            // Capabilities capabilities = sessionManager.CurrentSession.Value.Capabilities;
+            // var currentAuthType = ElympicsLobbyClient.Instance.AuthData.AuthType;
+            // Debug.Log("currentAuthType=" + currentAuthType);
+            // bool isGuest = currentAuthType is AuthType.ClientSecret or AuthType.None;
+            //
+            // playButtonText.text = isGuest ? "Train now" : "Play now";
+            // playerAvatar.SetActive(!isGuest);
+            // playerNickname.gameObject.SetActive(!isGuest);
+            // if (!isGuest)
+            // {
+            //     playerNickname.text = sessionManager.CurrentSession.Value.AuthData.Nickname;
+            //     if (!capabilities.IsTelegram())
+            //     {
+            //         playerEthAddress.text = sessionManager.CurrentSession.Value.SignWallet;
+            //     }
+            // }
+            //
+            // playerEthAddress.gameObject.SetActive(!isGuest && !capabilities.IsTelegram());
+            //
+            // Debug.Log("capabilities.IsEth() :" + capabilities.IsEth());
+            // Debug.Log("capabilities.IsTon() :" + capabilities.IsTon());
+            // Debug.Log("isGuest :" + isGuest);
+            //
+            // connectWalletButton.SetActive(capabilities.IsEth() || capabilities.IsTon() && isGuest);
+            // playQueue = currentAuthType switch
+            // {
+            //     AuthType.Telegram => "telegram",
+            //     AuthType.EthAddress => "eth",
+            //     _ => "training",
+            // };
+            // leaderboardQueue = currentAuthType == AuthType.Telegram ? "telegram" : "eth";
+            //
+            // CreateLeaderboardClient();
+            // FetchLeaderboardEntries();
         }
 
         public void CreateLeaderboardClient()
@@ -110,11 +110,18 @@ namespace Code.AIM_Studio
             authenticationInProgressScreen.SetActive(true);
         }
 
-        public void PlayGame()
+        public async void PlayGame()
         {
-            ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(playQueue);
             _persistentLobbyManager.SetAppState(PersistentLobbyManager.AppState.Matchmaking);
             matchmakingInProgressScreen.SetActive(true);
+            try
+            {
+                IRoom room = await ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(playQueue);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError(ex.Message);
+            }
         }
 
         public void ShowAccountInfo()

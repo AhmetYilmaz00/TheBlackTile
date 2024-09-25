@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Events
@@ -24,7 +23,6 @@ namespace Events
 
         private List<GameEventListener> listeners = new List<GameEventListener>();
 
-        [Button]
         public void Raise()
         {
             for (var i = listeners.Count - 1; i >= 0; i--)

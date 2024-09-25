@@ -2,6 +2,7 @@ using System;
 using Cysharp.Threading.Tasks;
 using Elympics;
 using ElympicsLobbyPackage;
+using ElympicsLobbyPackage.Authorization;
 using ElympicsLobbyPackage.Blockchain.Wallet;
 using ElympicsLobbyPackage.Session;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Code.AIM_Studio
         private SessionManager sessionManager;
         private Web3Wallet web3Wallet;
         private LobbyUIManager lobbyUIManager;
+        private ExternalAuthData _authData;
 
         public enum AppState
         {
@@ -39,7 +41,7 @@ namespace Code.AIM_Studio
             lobbyUIManager.SetPersistantLobbyManager(this);
         }
 
-        private void Start()
+        private async void Start()
         {
             GameObject elympicsExternalCommunicater = ElympicsExternalCommunicator.Instance.gameObject;
             sessionManager = elympicsExternalCommunicater.GetComponent<SessionManager>();
@@ -47,8 +49,32 @@ namespace Code.AIM_Studio
 
             SetLobbyUIManager();
 
-            ElympicsExternalCommunicator.Instance.GameStatusCommunicator.ApplicationInitialized();
-            AttemptStartAuthenticate().Forget();
+
+            await Initialize();
+        }
+
+        public async UniTask Initialize()
+        {
+            var config = ElympicsConfig.LoadCurrentElympicsGameConfig();
+            if (config == null)
+            {
+                Debug.Log("config is null");
+                return;
+            }
+
+            try
+            {
+                await sessionManager.AuthenticateFromExternalAndConnect();
+                _authData = new ExternalAuthData(sessionManager.CurrentSession.Value.AuthData,
+                    sessionManager.CurrentSession.Value.IsMobile, sessionManager.CurrentSession.Value.Capabilities,
+                    sessionManager.CurrentSession.Value.Environment);
+                ElympicsExternalCommunicator.Instance.GameStatusCommunicator.ApplicationInitialized();
+            }
+            catch (System.Exception ex)
+            {
+                Debug.Log("Initialization error : " + ex.Message);
+                Debug.Log(ex.StackTrace);
+            }
         }
 
         private async UniTask AttemptStartAuthenticate()

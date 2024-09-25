@@ -212,6 +212,10 @@ PrefabInstance:
       propertyPath: config
       value: 
       objectReference: {fileID: 11400000, guid: 13d332cc89e1e2a46ab11e27fca0d085, type: 2}
+    - target: {fileID: 7616533121664948154, guid: 915e03586cf042848bb2b1552a123930, type: 3}
+      propertyPath: config
+      value: 
+      objectReference: {fileID: 11400000, guid: 13d332cc89e1e2a46ab11e27fca0d085, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 915e03586cf042848bb2b1552a123930, type: 3}
 --- !u!114 &69087541 stripped
@@ -2108,6 +2112,10 @@ PrefabInstance:
       propertyPath: ethSigner
       value: 
       objectReference: {fileID: 69087541}
+    - target: {fileID: 4038678426090251085, guid: 3cdf86a27de66234b9a3326606f73313, type: 3}
+      propertyPath: currentRegion
+      value: warsaw
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3cdf86a27de66234b9a3326606f73313, type: 3}
 --- !u!1 &1488329917
@@ -2410,6 +2418,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 669d2224cf3df734b82999fb7fdb57e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1883439242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1883439228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 510e245ae3b27594da05e4689012064e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  authorizerConfig: {fileID: 11400000, guid: b9c2e5e692808b44cb044190512e8c2e, type: 2}
 --- !u!1 &1894903268
 GameObject:
   m_ObjectHideFlags: 0
