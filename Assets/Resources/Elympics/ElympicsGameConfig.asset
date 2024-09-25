@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameName: The Black Tile
   gameId: 62e5b16e-36fd-4238-a3e5-a34400c712dc
-  gameVersion: 32
+  gameVersion: 27
   players: 1
   gameplayScene: Assets/Scenes/Main.unity
   gameplaySceneAsset: {fileID: 102900000, guid: e16408446b727e14d86caf0a79e9a2dd, type: 3}

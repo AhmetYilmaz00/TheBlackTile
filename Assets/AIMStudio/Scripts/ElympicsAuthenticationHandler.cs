@@ -199,9 +199,14 @@ namespace AIMStudio.Scripts
                 IRoom room = await ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(GetPlayQueue());
                 Debug.Log(room);
                 _startingMatch = false;
+                Debug.Log("_startingMatch: " + _startingMatch);
+
                 OnStatusChanged?.Invoke();
                 LoadingAnimationManager.instance?.StopLoadingAnimation();
+                Debug.Log("StopLoadingAnimation");
+
                 InMatch = true;
+                Debug.Log("InMatch: " + InMatch);
             }
             catch (System.Exception ex)
             {
