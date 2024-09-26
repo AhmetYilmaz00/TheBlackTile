@@ -3655,7 +3655,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 20
+  m_SortingOrder: 1000
   m_TargetDisplay: 0
 --- !u!224 &1656779538
 RectTransform:
@@ -3729,6 +3729,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blockerParent: {fileID: 0}
   loadingImage: {fileID: 1691071978}
+  isUpdateWork: 1
 --- !u!114 &1691071978
 MonoBehaviour:
   m_ObjectHideFlags: 0

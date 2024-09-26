@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,13 +9,17 @@ namespace AIMStudio.Scripts
     {
         [SerializeField] private Transform blockerParent;
         [SerializeField] private Image loadingImage;
+        [SerializeField] private bool isUpdateWork;
 
         private Coroutine loadingAnimation;
 
         public void StartLoadingAnimation()
         {
             SetLoadingImageAndBlockerActive(true);
-            instance.loadingAnimation = StartCoroutine(LoadingAnimation());
+            if (!isUpdateWork)
+            {
+                instance.loadingAnimation = StartCoroutine(LoadingAnimation());
+            }
         }
 
         public void StopLoadingAnimation()
@@ -25,6 +30,14 @@ namespace AIMStudio.Scripts
             }
 
             SetLoadingImageAndBlockerActive(false);
+        }
+
+        private void Update()
+        {
+            if (isUpdateWork)
+            {
+                loadingImage.transform.Rotate(0f, 0f, Time.deltaTime * -100f);
+            }
         }
 
         IEnumerator LoadingAnimation()
