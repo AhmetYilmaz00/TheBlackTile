@@ -108,10 +108,8 @@ namespace AIMStudio.Scripts
                         bool refreshResult = await _sessionManager.TryReAuthenticateIfWalletChanged();
                         Debug.Log("refresh result : " + refreshResult);
                     }
-
                     ReturningBack = false;
                 }
-
                 LoadingAnimationManager.instance.StopLoadingAnimation();
                 return;
             }
@@ -123,7 +121,6 @@ namespace AIMStudio.Scripts
                 Debug.Log("config is null");
                 return;
             }
-
             try
             {
                 Debug.Log("Game Id : " + config.GameId);
@@ -132,9 +129,7 @@ namespace AIMStudio.Scripts
 
                 await _sessionManager.AuthenticateFromExternalAndConnect();
                 Debug.Log(_sessionManager.CurrentSession);
-                _authData = new ExternalAuthData(_sessionManager.CurrentSession.Value.AuthData,
-                    _sessionManager.CurrentSession.Value.IsMobile, _sessionManager.CurrentSession.Value.Capabilities,
-                    _sessionManager.CurrentSession.Value.Environment);
+                _authData = new ExternalAuthData(_sessionManager.CurrentSession.Value.AuthData, _sessionManager.CurrentSession.Value.IsMobile, _sessionManager.CurrentSession.Value.Capabilities, _sessionManager.CurrentSession.Value.Environment);
                 SendExternalInit();
                 Debug.Log("External Game Status Application Initialized");
                 Debug.Log("Initialization finishing");
@@ -149,7 +144,6 @@ namespace AIMStudio.Scripts
                 Debug.Log("Initialization error : " + ex.Message);
                 Debug.Log(ex.StackTrace);
             }
-
             _initializationInProgress = false;
         }
 
@@ -159,7 +153,6 @@ namespace AIMStudio.Scripts
             {
                 return;
             }
-
             ElympicsExternalCommunicator.Instance.GameStatusCommunicator.ApplicationInitialized();
             _externalInitSent = true;
         }
@@ -171,7 +164,6 @@ namespace AIMStudio.Scripts
                 Debug.Log("Wallet connecting in progress...");
                 return;
             }
-
             LoadingAnimationManager.instance.StartLoadingAnimation();
             _walletConnectionInProgress = true;
             try
@@ -183,7 +175,6 @@ namespace AIMStudio.Scripts
             {
                 Debug.Log("Exception while connecting wallet : " + ex.Message);
             }
-
             LoadingAnimationManager.instance.StopLoadingAnimation();
             _walletConnectionInProgress = false;
             OnStatusChanged?.Invoke();
@@ -196,20 +187,12 @@ namespace AIMStudio.Scripts
             LoadingAnimationManager.instance.StartLoadingAnimation();
             try
             {
-                Debug.Log("GetPlayQueue(): "+GetPlayQueue());
-                Debug.Log("ElympicsLobbyClient.Instance.RoomsManager: "+ElympicsLobbyClient.Instance.RoomsManager);
-
                 IRoom room = await ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(GetPlayQueue());
                 Debug.Log(room);
                 _startingMatch = false;
-                Debug.Log("_startingMatch: " + _startingMatch);
-
                 OnStatusChanged?.Invoke();
                 LoadingAnimationManager.instance?.StopLoadingAnimation();
-                Debug.Log("StopLoadingAnimation");
-
                 InMatch = true;
-                Debug.Log("InMatch: " + InMatch);
             }
             catch (System.Exception ex)
             {
@@ -246,7 +229,6 @@ namespace AIMStudio.Scripts
                     ReusableMethodForIsInMatch();
                     return;
                 }
-
                 TryToReauthenticate();
             }
             else if (connectionStatus == WalletConnectionStatus.Disconnected)
@@ -257,10 +239,8 @@ namespace AIMStudio.Scripts
                     ReusableMethodForIsInMatch();
                     return;
                 }
-
                 TryToReauthenticate();
             }
-
             OnStatusChanged?.Invoke();
         }
 
@@ -272,7 +252,6 @@ namespace AIMStudio.Scripts
                 ReusableMethodForIsInMatch();
                 return;
             }
-
             _sessionManager.TryReAuthenticateIfWalletChanged();
             OnStatusChanged?.Invoke();
         }
@@ -285,7 +264,6 @@ namespace AIMStudio.Scripts
                 ReusableMethodForIsInMatch();
                 return;
             }
-
             _sessionManager.TryReAuthenticateIfWalletChanged();
             OnStatusChanged?.Invoke();
         }
@@ -313,7 +291,6 @@ namespace AIMStudio.Scripts
             {
                 GameManagerElympics.instance?.GameOver(GameManagerElympics.GameOverReason.Disconnect);
             }
-
             DisconnectMessageBox();
             OnStatusChanged?.Invoke();
         }
@@ -350,8 +327,7 @@ namespace AIMStudio.Scripts
 
         public bool IsGuest()
         {
-            return (ElympicsLobbyClient.Instance.AuthData.AuthType == AuthType.ClientSecret ||
-                    ElympicsLobbyClient.Instance.AuthData.AuthType == AuthType.None);
+            return (ElympicsLobbyClient.Instance.AuthData.AuthType == AuthType.ClientSecret || ElympicsLobbyClient.Instance.AuthData.AuthType == AuthType.None);
         }
 
         public bool IsEthAddressShowable()
@@ -413,7 +389,6 @@ namespace AIMStudio.Scripts
                 Debug.Log("Not authenticated yet.");
                 return;
             }
-
             ElympicsLobbyClient.Instance.SignOut();
             TryToReauthenticate();
             OnStatusChanged?.Invoke();

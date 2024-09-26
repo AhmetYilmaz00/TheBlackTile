@@ -1264,82 +1264,6 @@ MonoBehaviour:
     - {x: 4, y: 1}
     - {x: 3, y: 1}
     - {x: 2, y: 0}
---- !u!1 &1196832281
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1196832284}
-  - component: {fileID: 1196832283}
-  - component: {fileID: 1196832282}
-  m_Layer: 0
-  m_Name: GameManagerElympics
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1196832282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196832281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f11b5bfbfccd044f8397b22572195ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameState: 0
-  randomManager: {fileID: 0}
---- !u!114 &1196832283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196832281}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 334c2a3facb248ac8c1a599797c52dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceNetworkId: 0
-  networkId: 7
-  predictableFor:
-    playerIndex: -3
-  isUpdatableForNonOwners: 0
-  visibleFor:
-    playerIndex: -3
-  stateFrequencyStages:
-  - stageDurationInMiliseconds: 500
-    frequencyInMiliseconds: 30
-    maxStageDurationInMiliseconds: 5000
-  - stageDurationInMiliseconds: 1000
-    frequencyInMiliseconds: 200
-    maxStageDurationInMiliseconds: 5000
-  - stageDurationInMiliseconds: 1000
-    frequencyInMiliseconds: 1000
-    maxStageDurationInMiliseconds: 5000
---- !u!4 &1196832284
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1196832281}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1216840266
 GameObject:
   m_ObjectHideFlags: 0
@@ -1541,6 +1465,90 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa601a404d571fb4180f7c790fc1eab4, type: 3}
+--- !u!1 &1264108393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1264108396}
+  - component: {fileID: 1264108395}
+  - component: {fileID: 1264108394}
+  m_Layer: 0
+  m_Name: ScoreManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1264108394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264108393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e36d49ad4495fe4fa6696bcb32459e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 0
+  highScore: 0
+  todayHighScore: 0
+  specialPoints: 0
+  numberOfGames: 0
+  highscoreScoredInThisSession: 0
+  todayHighscoreScoredInThisSession: 0
+  OnScoredHighscore:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1264108395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264108393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334c2a3facb248ac8c1a599797c52dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceNetworkId: 0
+  networkId: 9
+  predictableFor:
+    playerIndex: -3
+  isUpdatableForNonOwners: 0
+  visibleFor:
+    playerIndex: -3
+  stateFrequencyStages:
+  - stageDurationInMiliseconds: 500
+    frequencyInMiliseconds: 30
+    maxStageDurationInMiliseconds: 5000
+  - stageDurationInMiliseconds: 1000
+    frequencyInMiliseconds: 200
+    maxStageDurationInMiliseconds: 5000
+  - stageDurationInMiliseconds: 1000
+    frequencyInMiliseconds: 1000
+    maxStageDurationInMiliseconds: 5000
+--- !u!4 &1264108396
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1264108393}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 513.0156, y: 755.40375, z: -116.42969}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1298022486
 GameObject:
   m_ObjectHideFlags: 0
@@ -2785,5 +2793,5 @@ SceneRoots:
   - {fileID: 1623717860}
   - {fileID: 1979524735}
   - {fileID: 811343013}
-  - {fileID: 1196832284}
   - {fileID: 907088342}
+  - {fileID: 1264108396}
