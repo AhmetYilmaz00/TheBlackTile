@@ -8,6 +8,8 @@ public class GUIManager : SingletonBehaviour<GUIManager>
 {
     public List<GUIScreen> AllOpenedUIScreens;
     public SingletonGameEvent onLoadedGameSceneUI;
+    public GameObject gameOverPanel;
+
     private GUIScreenType _currentOpenScreen;
 
     private void OnEnable()
@@ -39,7 +41,8 @@ public class GUIManager : SingletonBehaviour<GUIManager>
             case GameState.GameOverWin:
                 break;
             case GameState.GameOverLose:
-                OpenOverlayScreen(GUIScreenType.GameoverLose);
+                gameOverPanel.SetActive(true);
+                // OpenOverlayScreen(GUIScreenType.GameoverLose);
                 break;
         }
     }

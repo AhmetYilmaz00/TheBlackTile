@@ -29,7 +29,6 @@ public class GameManager : SingletonBehaviour<GameManager>
         {
             _previousGameState = _gameState;
             Messenger<GameState, GameState>.Broadcast(Message.PreGameStateChange, value, _previousGameState);
-            Debug.Log("_previousGameState: "+_previousGameState);
             _gameState = value;
             Messenger<GameState, GameState>.Broadcast(Message.PostGameStateChange, _gameState, _previousGameState);
 

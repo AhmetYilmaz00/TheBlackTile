@@ -1,4 +1,5 @@
-﻿using AIMStudio.Scripts;
+﻿using System.Collections;
+using AIMStudio.Scripts;
 using Code.AIM_Studio;
 using TMPro;
 using UnityEngine;
@@ -11,27 +12,39 @@ namespace Code.GUI
     {
         public Button TryAgainButton;
         public TMP_Text ScoreText;
-        public TMP_Text HighScoreText;
+        public TMP_Text TotalMoveText;
         public TextMeshProUGUI respect_TMP;
+        public GameObject YesWallet;
+        public GameObject NoWallet;
+        public GameObject loadingIcon;
 
         private GameManagerAim _gameManagerAim;
         private DisplayManager _displayManager;
 
-        private void Awake()
+        private void OnEnable()
         {
             _gameManagerAim = FindObjectOfType<GameManagerAim>();
             _displayManager = FindObjectOfType<DisplayManager>();
             TryAgainButton.onClick.AddListener(OnSubmit);
-            ScoreText.text = _gameManagerAim.score.Value.ToString();
+            ScoreText.text = "SCORE: " + _gameManagerAim.score.Value;
+            TotalMoveText.text = "TOTAL MOVE: " + _gameManagerAim.totalMoveCount;
             if (ElympicsAuthenticationHandler.instance.IsGuest())
             {
-                respect_TMP.text = "Please connect wallet to earn respect.";
+                YesWallet.SetActive(false);
+                NoWallet.SetActive(true);
             }
             else
             {
                 _displayManager.DisplayRespect(respect_TMP);
+                StartCoroutine(WaitGetRespect());
             }
             //  HighScoreText.text = GameManager.instance.Progress.highScore.ToString();
+        }
+
+        private IEnumerator WaitGetRespect()
+        {
+            yield return new WaitUntil(() => respect_TMP.text != "");
+            loadingIcon.SetActive(false);
         }
 
         private void Restart()

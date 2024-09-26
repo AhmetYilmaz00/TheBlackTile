@@ -63,7 +63,7 @@ namespace Code.GUI
             // }
             // else
             // {
-                ScoreText.text = "0";
+            ScoreText.text = "0";
             //     BestScoreText.text = _bestScore.ToString();
             // }
 
@@ -129,6 +129,7 @@ namespace Code.GUI
 
         private void AddToScore(int additionalScore)
         {
+            _gameManagerAim.totalMoveCount++;
             Score += additionalScore;
             var addPointTextController = Instantiate(addPointTextObject, addPointTextParent);
             addPointTextController.GetComponent<AddPointTextController>()

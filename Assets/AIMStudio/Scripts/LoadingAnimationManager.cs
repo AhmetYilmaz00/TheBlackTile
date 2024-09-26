@@ -23,6 +23,7 @@ namespace AIMStudio.Scripts
             {
                 StopCoroutine(instance.loadingAnimation);
             }
+
             SetLoadingImageAndBlockerActive(false);
         }
 
@@ -34,13 +35,15 @@ namespace AIMStudio.Scripts
                 {
                     loadingImage.transform.Rotate(0f, 0f, Time.deltaTime * -100f);
                 }
+
                 yield return null;
             }
         }
 
         void SetLoadingImageAndBlockerActive(bool active)
         {
-            blockerParent.gameObject.SetActive(active);
+            if (blockerParent != null)
+                blockerParent.gameObject.SetActive(active);
         }
     }
 }

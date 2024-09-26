@@ -10,6 +10,7 @@ namespace Code.AIM_Studio
     public class GameManagerAim : ElympicsMonoBehaviour, IUpdatable, IInitializable
     {
         public ElympicsInt score;
+        public int totalMoveCount;
 
 
         [SerializeField] private float timerDuration;

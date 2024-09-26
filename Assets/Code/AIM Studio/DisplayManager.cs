@@ -68,17 +68,14 @@ namespace Code.AIM_Studio
         {
             if (!ElympicsLobbyClient.Instance.IsAuthenticated)
             {
-                respectText.text = "Log in to earn respect";
+                respectText.text = "-1";
             }
-            else
-            {
-                RespectService respectService = new RespectService(ElympicsLobbyClient.Instance, ElympicsConfig.Load());
-                var matchID = ElympicsLobbyClient.Instance.RoomsManager.ListJoinedRooms()[0].State.MatchmakingData!
-                    .MatchData!.MatchId;
-                var respectValue = await respectService.GetRespectForMatch(matchID);
 
-                respectText.text = "Respect earned: " + respectValue.Respect.ToString();
-            }
+            RespectService respectService = new RespectService(ElympicsLobbyClient.Instance, ElympicsConfig.Load());
+            var matchID = ElympicsLobbyClient.Instance.RoomsManager.ListJoinedRooms()[0].State.MatchmakingData!
+                .MatchData!.MatchId;
+            var respectValue = await respectService.GetRespectForMatch(matchID);
+            respectText.text = respectValue.Respect.ToString();
         }
     }
 }

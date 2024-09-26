@@ -278,10 +278,7 @@ public class GridManager : SingletonBehaviour<GridManager>, IGridManager
         if (!_gameManagerAim.IsServer())
         {
             InputManager.instance.inputWait = true;
-            Debug.Log("Selami _gameManagerAim.currentHandBlocks: " + _gameManagerAim.currentHandBlocks);
-            Debug.Log("Selami _gameManagerAim.seedArray.Values.Count(x => x != 0): " +
-                      _gameManagerAim.seedArray.Values.Count(x => x != 0));
-
+            
             yield return new WaitUntil(() =>
                 _gameManagerAim.currentHandBlocks > 0 && _gameManagerAim.seedArray.Values.Count(x => x != 0) > 0);
             _gameManagerAim.RepairSeedArray();
