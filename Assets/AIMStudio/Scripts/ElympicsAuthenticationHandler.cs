@@ -196,6 +196,9 @@ namespace AIMStudio.Scripts
             LoadingAnimationManager.instance.StartLoadingAnimation();
             try
             {
+                Debug.Log("GetPlayQueue(): "+GetPlayQueue());
+                Debug.Log("ElympicsLobbyClient.Instance.RoomsManager: "+ElympicsLobbyClient.Instance.RoomsManager);
+
                 IRoom room = await ElympicsLobbyClient.Instance.RoomsManager.StartQuickMatch(GetPlayQueue());
                 Debug.Log(room);
                 _startingMatch = false;
