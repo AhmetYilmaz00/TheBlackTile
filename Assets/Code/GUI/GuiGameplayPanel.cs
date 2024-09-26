@@ -30,7 +30,11 @@ namespace Code.GUI
         public int Score
         {
             get => _gameManagerAim.score.Value;
-            private set => _gameManagerAim.score.Value = value;
+            private set
+            {
+                _gameManagerAim.score.Value = value;
+                _gameManagerAim.scoreLocal = value;
+            } 
         }
 
         private int _bestScore;

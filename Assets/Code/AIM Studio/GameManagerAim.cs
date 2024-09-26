@@ -10,6 +10,7 @@ namespace Code.AIM_Studio
     public class GameManagerAim : ElympicsMonoBehaviour, IUpdatable, IInitializable
     {
         public ElympicsInt score;
+        public int scoreLocal;
         public int totalMoveCount;
 
 
@@ -136,15 +137,14 @@ namespace Code.AIM_Studio
             if (Elympics.IsServer)
             {
                 Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData>
-                    { new ResultMatchPlayerData { MatchmakerData = new float[1] { score.Value } } }));
-                
+                    { new ResultMatchPlayerData { MatchmakerData = new float[1] { scoreLocal } } }));
             }
 
             GameManager.instance.OnLevelLose();
-            if (Elympics.IsClient)
-            {
-                ElympicsExternalCommunicator.Instance.GameStatusCommunicator.GameFinished(score.Value);
-            }
+            // if (Elympics.IsClient)
+            // {
+            //     ElympicsExternalCommunicator.Instance.GameStatusCommunicator.GameFinished(scoreLocal);
+            // }
         }
     }
 }
