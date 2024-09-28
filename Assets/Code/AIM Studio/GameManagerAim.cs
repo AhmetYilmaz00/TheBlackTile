@@ -104,12 +104,7 @@ namespace Code.AIM_Studio
                 GameManager.instance.StartLevel();
                 ClearAllData();
             }
-
-            Debug.Log("Deneme seedArray.Values.Count(x => x != 0): " + seedArray.Values.Count(x => x != 0));
-            Debug.Log("Deneme seedArrayClient.Count(x => x != 0): " + seedArrayClient.Count(x => x != 0));
-            Debug.Log("Deneme currentHandBlocks: " + currentHandBlocks);
-
-
+            
             if (timer.Value <= 0 && !_isFinishGame)
             {
                 timer.Value = 0;
