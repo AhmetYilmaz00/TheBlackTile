@@ -3,7 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Code.AIM_Studio;
 using Code.GUI;
+using Code.Managers;
 using UnityEngine;
 
 public class LevelManager : SingletonBehaviour<LevelManager>
@@ -61,7 +63,9 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
     public void GenerateLevel()
     {
-        GridManager.instance.GenerteGridRandom();
+        FindObjectOfType<GameManagerAim>().DebugString.Values[2].Value = " GenerateLevel";
+        FindObjectOfType<GridManager>().GenerteGridRandom();
+        //GridManager.instance.GenerteGridRandom();
     }
 
     public void GenerateLevelFromData(LevelData levelData)

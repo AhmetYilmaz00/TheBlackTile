@@ -15,9 +15,11 @@ namespace Code.AIM_Studio
 
 
         [SerializeField] private float timerDuration;
-        [SerializeField] private DisplayManager displayManager;
         public ElympicsArray<ElympicsInt> seedArray = new();
         public bool updateGridControlClient;
+        public ElympicsArray<ElympicsString> DebugString = new();
+        private DisplayManager displayManager;
+
 
         public int currentHandBlocks = 0;
         private ElympicsFloat timer = new();
@@ -30,16 +32,16 @@ namespace Code.AIM_Studio
 
         private void Start()
         {
-            Debug.Log("GameManagerAimStart");
-            Debug.Log("Start Elympics.IsClient=" + Elympics.IsClient);
+            displayManager = FindObjectOfType<DisplayManager>();
         }
 
         public void Initialize()
         {
             timer.Value = timerDuration;
             seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
+            DebugString = new ElympicsArray<ElympicsString>(100, () => new ElympicsString());
+
             _isServer = Elympics.IsServer;
-            Debug.Log("Elympics.IsClient=" + Elympics.IsClient);
             // if (Elympics.IsClient)
             // {
             //     if (ElympicsExternalCommunicator.Instance != null)
@@ -52,13 +54,15 @@ namespace Code.AIM_Studio
         public int GetElympicsSeed()
         {
             var generatedSeed = 0;
-            if (Elympics.IsServer)
+            if (_isServer)
             {
+
                 generatedSeed = _seedCounter + DateTime.Now.Millisecond;
+                
                 seedArray.Values[_seedCounter].Value = generatedSeed;
                 Debug.Log("Sunucu tarafından belirlenen seed: " + generatedSeed);
             }
-            else if (Elympics.IsClient)
+            else
             {
                 generatedSeed = seedArrayClient[_seedCounter];
                 Debug.Log("Client tarafından belirlenen seed: " + generatedSeed);
@@ -92,9 +96,16 @@ namespace Code.AIM_Studio
             }
         }
 
+        bool AllElementsAreZero(ElympicsArray<ElympicsInt> list)
+        {
+            var tempList = list.Values.Select(obj => (int)obj).ToList();
+
+            return !(tempList.All(element => element == 0));
+        }
+
         public void ElympicsUpdate()
         {
-            if (Elympics.IsClient && seedArrayClient.Count <= 0)
+            if (!IsServer() && seedArrayClient.Count <= 0 && AllElementsAreZero(seedArray))
             {
                 foreach (var value in seedArray.Values)
                 {
@@ -115,8 +126,15 @@ namespace Code.AIM_Studio
             }
             else if (timer.Value > 0)
             {
-                timer.Value -= Elympics.TickDuration;
-                displayManager.DisplayTimer(timer.Value);
+                if (_isServer)
+                {
+                    timer.Value -= Elympics.TickDuration;
+                }
+
+                if (!_isServer)
+                {
+                    displayManager.DisplayTimer(timer.Value);
+                }
             }
         }
 

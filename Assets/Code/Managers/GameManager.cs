@@ -2,9 +2,10 @@
 using System.Collections;
 using Code.AIM_Studio;
 using Code.GUI;
+using Elympics;
 using UnityEngine;
 
-public class GameManager : SingletonBehaviour<GameManager>
+public class GameManager : SingletonBehaviour<GameManager>, IInitializable
 {
     [SerializeField] private GameManagerAim gameManagerAim;
     public PlayerProgress Progress;
@@ -17,7 +18,8 @@ public class GameManager : SingletonBehaviour<GameManager>
         get { return _previousGameState; }
     }
 
-    [NaughtyAttributes.ReadOnly] [SerializeField] private GameState _gameState;
+    [NaughtyAttributes.ReadOnly] [SerializeField]
+    private GameState _gameState;
 
     public LevelData CurrentLevelData;
 
@@ -54,21 +56,25 @@ public class GameManager : SingletonBehaviour<GameManager>
         _gameState = GameState.Menu;
         GameState = GameState.Menu;
 
-        
-          //  StartCoroutine(StartLevelFromLevelData(Progress.levelData));
-        
+
+        //  StartCoroutine(StartLevelFromLevelData(Progress.levelData));
+
         // else if (!Progress.tutorialDone)
         // {
         //     GameState = GameState.Tutorial;
         //     TutorialManager.instance.StartTutorial();
         // }
-       
-            Progress.levelData.Score = 0;
-            if (gameManagerAim.IsServer())
-            {
-                StartLevel();
-            }
-        
+
+        Progress.levelData.Score = 0;
+    }
+
+    public void Initialize()
+    {
+        if (gameManagerAim.IsServer())
+        {
+            gameManagerAim.DebugString.Values[0].Value = " StartLevel();";
+            StartLevel();
+        }
     }
 
 
@@ -102,6 +108,8 @@ public class GameManager : SingletonBehaviour<GameManager>
 
     private void LoadLevel()
     {
+        gameManagerAim.DebugString.Values[1].Value = " LoadLevel()";
+
         LevelManager.instance.GenerateLevel();
     }
 
@@ -126,7 +134,7 @@ public class GameManager : SingletonBehaviour<GameManager>
         GoToMenu();
     }
 
-    public void OnLevelLose()       
+    public void OnLevelLose()
     {
         Progress.isLevelDataSaved = false;
         Progress.levelData = null;

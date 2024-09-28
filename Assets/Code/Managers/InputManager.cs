@@ -2,12 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AIMStudio.Scripts;
 using Code.AIM_Studio;
 using Code.Managers;
 using Elympics;
 using UnityEngine;
 
-public class InputManager : SingletonBehaviour<InputManager>
+public class InputManager : SingletonBehaviour<InputManager>, IInitializable
 {
     public LineRenderer LineRenderer;
     public bool inputWait;
@@ -22,7 +23,7 @@ public class InputManager : SingletonBehaviour<InputManager>
     private IGridManager _gridManager;
     private PlayerInputControllerAim _playerInputControllerAim;
 
-    private void Awake()
+    public void Initialize()
     {
         _gameManagerAim = FindObjectOfType<GameManagerAim>();
         _blockLayerMask = LayerMask.GetMask(Layers.BLOCK);
@@ -56,8 +57,23 @@ public class InputManager : SingletonBehaviour<InputManager>
 
     private void Update()
     {
-        _playerInputControllerAim.inputMousePositionX = Input.mousePosition.x;
-        _playerInputControllerAim.inputMousePositionY = Input.mousePosition.y;
+        if (!_playerInputControllerAim)
+        {
+            _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
+        }
+
+        _gameManagerAim.DebugString.Values[6].Value = Input.mousePosition.x.ToString();
+        _gameManagerAim.DebugString.Values[7].Value = Input.mousePosition.y.ToString();
+        if (_playerInputControllerAim.mouseButtonState == 1)
+        {
+            _gameManagerAim.DebugString.Values[8].Value = 1.ToString();
+        }
+        else if (_playerInputControllerAim.mouseButtonState == 2)
+        {
+            _gameManagerAim.DebugString.Values[9].Value = 2.ToString();
+        }
+
+
         if (GameManager.instance.GameState != GameState.Gameplay &&
             GameManager.instance.GameState != GameState.Tutorial)
             return;
@@ -67,18 +83,22 @@ public class InputManager : SingletonBehaviour<InputManager>
             Debug.Log("_gridManager.AnimationsPlaying: RETURN");
             return;
         }
+
         if (inputWait)
         {
             return;
         }
 
-        if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
+        if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.mouseButtonState == 2)
         {
             Debug.Log(" _playerInputControllerAim.serverMouseButtonState == 2");
+            if (_gameManagerAim.IsServer())
+            {
+                _gameManagerAim.DebugString.Values[10].Value = 2.ToString();
+            }
+
             if (!_inputHeld)
                 return;
-
-
             if (selectedBlocks.Count > 1)
             {
                 _gridManager.DefenderBlock.SetSelected(false);
@@ -97,15 +117,15 @@ public class InputManager : SingletonBehaviour<InputManager>
             _gridManager.DefenderBlock.ClearNumberPreview();
             selectedBlocks = new List<Block>();
         }
-        else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverMouseButtonState == 1)
+        else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.mouseButtonState == 1)
         {
-            _playerInputControllerAim.serverMouseButtonState = 0;
+            _playerInputControllerAim.mouseButtonState = 0;
             RaycastHit blockHit;
-            if (_playerInputControllerAim.isServer)
+            if (_gameManagerAim.IsServer())
             {
                 blockHit = PerformRaycast(
-                    new Vector3(_playerInputControllerAim.serverInputMousePositionX,
-                        _playerInputControllerAim.serverInputMousePositionY, 0), _blockLayerMask);
+                    new Vector3(_playerInputControllerAim.mousePositionX,
+                        _playerInputControllerAim.mousePositionY, 0), _blockLayerMask);
 
                 _gameManagerAim.ClearAllData();
             }
@@ -146,21 +166,21 @@ public class InputManager : SingletonBehaviour<InputManager>
                 _inputHeld = false;
             }
         }
-        else if (Input.GetMouseButton(0) || _playerInputControllerAim.serverInputGetMouse)
+        else if (Input.GetMouseButton(0) || _playerInputControllerAim.isDraggingState)
         {
             if (!_inputHeld)
                 return;
 
             RaycastHit blockHit;
-            if (_playerInputControllerAim.isServer)
+            if (_gameManagerAim.IsServer())
             {
                 blockHit = PerformRaycast(
-                    new Vector3(_playerInputControllerAim.serverInputMousePositionX,
-                        _playerInputControllerAim.serverInputMousePositionY, 0), _blockLayerMask);
+                    new Vector3(_playerInputControllerAim.mousePositionX,
+                        _playerInputControllerAim.mousePositionY, 0), _blockLayerMask);
             }
             else
             {
-                _playerInputControllerAim.inputGetMouse = true;
+                _playerInputControllerAim.isDraggingState = true;
                 blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
             }
 

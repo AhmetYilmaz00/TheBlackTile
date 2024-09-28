@@ -2462,7 +2462,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7478984382966778708, guid: 23c37f7b377492d4badab30ca19e0481, type: 3}
       propertyPath: PreOpenEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7478984382966778708, guid: 23c37f7b377492d4badab30ca19e0481, type: 3}
       propertyPath: PostOpenEvent.m_PersistentCalls.m_Calls.Array.size
