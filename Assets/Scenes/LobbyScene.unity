@@ -614,9 +614,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '000000000000000
-
-'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c5ee151f9307453bad78be36b51a077, type: 2}
   m_sharedMaterial: {fileID: 2517202264660172603, guid: 5c5ee151f9307453bad78be36b51a077, type: 2}
@@ -643,7 +641,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.9
+  m_fontSize: 50
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6373,6 +6371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 686754168951802019}
+  - component: {fileID: 3001919123541951407}
   m_Layer: 5
   m_Name: Top_Menu
   m_TagString: Untagged
@@ -6380,6 +6379,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &3001919123541951407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3001919123541951406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5d6cec686ca4d941a9e86964898bb56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nicknameText: {fileID: 6295845265197780821}
+  nicknameText2: {fileID: 8126913697206213783}
+  walletAdressText: {fileID: 383070186}
+  button: {fileID: 1894903272}
+  showY: -50
+  hideY: 50
 --- !u!1 &3046130540107635274
 GameObject:
   m_ObjectHideFlags: 0
@@ -8005,7 +8022,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PlayerNickname
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5c5ee151f9307453bad78be36b51a077, type: 2}
   m_sharedMaterial: {fileID: 2517202264660172603, guid: 5c5ee151f9307453bad78be36b51a077, type: 2}
@@ -8032,7 +8049,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 47.4
+  m_fontSize: 50
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -8781,7 +8798,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7531631986792438044}
-  - component: {fileID: 7601401022193716532}
   m_Layer: 5
   m_Name: Ranking
   m_TagString: Untagged
@@ -8789,24 +8805,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &7601401022193716532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7601401022193716531}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5d6cec686ca4d941a9e86964898bb56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nicknameText: {fileID: 6295845265197780821}
-  nicknameText2: {fileID: 8126913697206213783}
-  walletAdressText: {fileID: 383070186}
-  button: {fileID: 1894903272}
-  showY: -50
-  hideY: 50
 --- !u!222 &7609833137998378955
 CanvasRenderer:
   m_ObjectHideFlags: 0

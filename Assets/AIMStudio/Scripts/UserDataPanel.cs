@@ -86,13 +86,17 @@ namespace AIMStudio.Scripts
         public void HideUserDataPanel()
         {
             //ADD COROUTINE / ANIMATION HERE
-            rectTransform.anchoredPosition = new Vector3(0, hideY, 0);
+            nicknameText.gameObject.SetActive(false);
+            nicknameText2.gameObject.SetActive(false);
+            walletAdressText.gameObject.SetActive(false);
         }
 
         public void ShowUserDataPanel()
         {
             //ADD COROUTINE / ANIMATION HERE
-            rectTransform.anchoredPosition = new Vector3(0, showY, 0);
+            nicknameText.gameObject.SetActive(true);
+            nicknameText2.gameObject.SetActive(true);
+            walletAdressText.gameObject.SetActive(true);
         }
     }
 }
