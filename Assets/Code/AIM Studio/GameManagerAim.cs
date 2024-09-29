@@ -26,10 +26,9 @@ namespace Code.AIM_Studio
         public List<int> seedArrayClient = new();
         private bool _isServer;
         private bool _isFinishGame;
-        
+
         public Guid matchID;
 
-  
 
         private void OnMatchDataReceived(MatchDataReceivedArgs args)
         {
@@ -41,7 +40,6 @@ namespace Code.AIM_Studio
         {
             displayManager = FindObjectOfType<DisplayManager>();
             ElympicsLobbyClient.Instance.RoomsManager.MatchDataReceived += OnMatchDataReceived;
-
         }
 
         public void Initialize()

@@ -127,11 +127,11 @@ namespace Code.GUI
         {
             if (_gameManagerAim.IsServer())
             {
-                _gameManagerAim.totalMoveCount++;
-                _gameManagerAim.DebugString.Values[16].Value = "AddToScore: " + _gameManagerAim.score.Value;
                 _gameManagerAim.score.Value += additionalScore;
             }
-Debug.Log("Scccore: "+ _gameManagerAim.score.Value);
+
+            _gameManagerAim.totalMoveCount++;
+
             var addPointTextController = Instantiate(addPointTextObject, addPointTextParent);
             addPointTextController.GetComponent<AddPointTextController>()
                 .AddPointEffectStart(additionalScore.ToString(), ScoreText);
