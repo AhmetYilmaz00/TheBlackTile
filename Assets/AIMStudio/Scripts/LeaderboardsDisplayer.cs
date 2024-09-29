@@ -254,9 +254,9 @@ public class LeaderboardsDisplayer : MonoBehaviour
     private void ShowBestScore(int score)
     {
         if (ElympicsAuthenticationHandler.instance.GetPlayQueue() == "training")
-            bestScoreText.text = "Best guest Score: " + "<b>" + score.ToString() + "</b>";
+            bestScoreText.text = score.ToString();
         else
-            bestScoreText.text = "Best Score: " + "<b>" + score.ToString() + "</b>";
+            bestScoreText.text = score.ToString();
         
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);

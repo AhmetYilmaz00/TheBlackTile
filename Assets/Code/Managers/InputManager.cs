@@ -95,10 +95,10 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
         if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
         {
             Debug.Log(" _playerInputControllerAim.serverMouseButtonState == 2");
-            
-                if (!_inputHeld)
-                    return;
-            
+
+            if (!_inputHeld)
+                return;
+
 
             if (selectedBlocks.Count > 1)
             {
@@ -127,23 +127,17 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
         {
             _playerInputControllerAim.serverMouseButtonState = 0;
             RaycastHit blockHit;
-            var input = new Vector3(_playerInputControllerAim.serverMousePositionX,
-                _playerInputControllerAim.serverMousePositionY, 0);
-            int screenWidth = Screen.width;
-            int screenHeight = Screen.height;
             if (_gameManagerAim.IsServer())
             {
-                _gameManagerAim.DebugString.Values[19].Value = input.ToString();
-                _gameManagerAim.DebugString.Values[20].Value = "w: " + screenWidth + " h: " + screenHeight;
+                var input = new Vector3(_playerInputControllerAim.serverMousePositionX,
+                    _playerInputControllerAim.serverMousePositionY, 0);
                 blockHit = PerformRaycast(input, _blockLayerMask);
 
                 _gameManagerAim.ClearAllData();
             }
             else
             {
-                blockHit = PerformRaycast(input, _blockLayerMask);
-                Debug.Log(Input.mousePosition);
-                Debug.Log("w: " + screenWidth + " h: " + screenHeight);
+                blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
             }
 
             if (blockHit.collider == null)
@@ -193,10 +187,9 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
         else if (Input.GetMouseButton(0) || _playerInputControllerAim.serverIsDraggingState)
         {
             _gameManagerAim.DebugString.Values[7].Value = "_inputHeld = " + _inputHeld;
-            
-                if (!_inputHeld)
-                    return;
-            
+
+            if (!_inputHeld)
+                return;
 
 
             RaycastHit blockHit;

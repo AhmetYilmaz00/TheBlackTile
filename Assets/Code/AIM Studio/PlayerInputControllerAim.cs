@@ -26,6 +26,12 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
     public float serverScreenPositionY;
     public bool serverIsDraggingState;
 
+    float oldXMin = 123f, oldXMax = 956f;
+    float newXMin = 216f, newXMax = 424f;
+
+    float oldYMin = 102f, oldYMax = 1637f;
+    float newYMin = 27f, newYMax = 407f;
+
 
     private GameManagerAim _gameManagerAim;
     public bool IsDragging => isDraggingState;
@@ -76,6 +82,12 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
         _gameManagerAim = FindObjectOfType<GameManagerAim>();
     }
 
+    float RescaleValue(float value, float oldMin, float oldMax, float newMin, float newMax)
+    {
+        return ((value - oldMin) / (oldMax - oldMin)) * (newMax - newMin) + newMin;
+    }
+
+
     public void ElympicsUpdate()
     {
         if (ElympicsBehaviour.TryGetInput(PredictableFor, out var inputReader))
@@ -89,35 +101,25 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
 
             //Log($"Elympics Update - MouseButtonState: {mouseButtonState}, MousePosition: {mousePositionX}, {mousePositionY}, IsDragging: {isDraggingState}");
         }
-
-        if (_gameManagerAim.IsServer())
-        {
-            if (serverMouseButtonState == 1 || serverMouseButtonState == 2)
-            {
-                _gameManagerAim.DebugString.Values[11].Value = serverMouseButtonState.ToString();
-            }
-
-            _gameManagerAim.DebugString.Values[12].Value = serverMousePositionX.ToString();
-
-
-            _gameManagerAim.DebugString.Values[13].Value = serverMousePositionY.ToString();
-
-
-            _gameManagerAim.DebugString.Values[14].Value = serverIsDraggingState.ToString();
-        }
     }
 
     public void OnInputForClient(IInputWriter inputWriter)
     {
         if (Elympics.Player != PredictableFor)
             return;
+
+
+        // X ve Y değerlerini dönüştürme
+        float newX = RescaleValue(mousePositionX, oldXMin, oldXMax, newXMin, newXMax);
+        float newY = RescaleValue(mousePositionY, oldYMin, oldYMax, newYMin, newYMax);
+
+
         inputWriter.Write(mouseButtonState);
-        inputWriter.Write(mousePositionX);
-        inputWriter.Write(mousePositionY);
+        inputWriter.Write(newX);
+        inputWriter.Write(newY);
         inputWriter.Write(screenPositionX);
         inputWriter.Write(screenPositionY);
         inputWriter.Write(isDraggingState);
-        Debug.Log("ElympicsUpdate: " + mouseButtonState);
 
         //Log($"Input For Client - MouseButtonState: {mouseButtonState}, MousePosition: {mousePositionX}, {mousePositionY}, IsDragging: {isDraggingState}");
 

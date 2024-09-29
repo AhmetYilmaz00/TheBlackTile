@@ -469,6 +469,7 @@ namespace Code.Managers
 
             transform.position = Vector3.zero;
             Vector2Int gridSize = GameplayConfiguration.instance.GridSize;
+
             _blocks = new Block[gridSize.x, gridSize.y];
             _positions = new Vector3[gridSize.x, gridSize.y];
 
