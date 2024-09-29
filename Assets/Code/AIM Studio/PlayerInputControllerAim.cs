@@ -1,4 +1,3 @@
-using System;
 using Code.AIM_Studio;
 using Elympics;
 using UnityEngine;
@@ -18,6 +17,15 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
     public float screenPositionX;
     public float screenPositionY;
     public bool isDraggingState;
+
+
+    public int serverMouseButtonState;
+    public float serverMousePositionX;
+    public float serverMousePositionY;
+    public float serverScreenPositionX;
+    public float serverScreenPositionY;
+    public bool serverIsDraggingState;
+
 
     private GameManagerAim _gameManagerAim;
     public bool IsDragging => isDraggingState;
@@ -70,50 +78,46 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
 
     public void ElympicsUpdate()
     {
-        if (ElympicsBehaviour.TryGetInput(PredictableFor, out IInputReader inputReader))
+        if (ElympicsBehaviour.TryGetInput(PredictableFor, out var inputReader))
         {
-            inputReader.Read(out mouseButtonState);
-            inputReader.Read(out mousePositionX);
-            inputReader.Read(out mousePositionX);
-            inputReader.Read(out screenPositionX);
-            inputReader.Read(out screenPositionY);
-            inputReader.Read(out isDraggingState);
+            inputReader.Read(out serverMouseButtonState);
+            inputReader.Read(out serverMousePositionX);
+            inputReader.Read(out serverMousePositionY);
+            inputReader.Read(out serverScreenPositionX);
+            inputReader.Read(out serverScreenPositionY);
+            inputReader.Read(out serverIsDraggingState);
 
             //Log($"Elympics Update - MouseButtonState: {mouseButtonState}, MousePosition: {mousePositionX}, {mousePositionY}, IsDragging: {isDraggingState}");
         }
 
         if (_gameManagerAim.IsServer())
         {
-            if (mouseButtonState == 1 || mouseButtonState == 2)
+            if (serverMouseButtonState == 1 || serverMouseButtonState == 2)
             {
-                _gameManagerAim.DebugString.Values[11].Value = mouseButtonState.ToString();
+                _gameManagerAim.DebugString.Values[11].Value = serverMouseButtonState.ToString();
             }
 
-            if (mousePositionX > 0)
-            {
-                _gameManagerAim.DebugString.Values[12].Value = mousePositionX.ToString();
-            }
+            _gameManagerAim.DebugString.Values[12].Value = serverMousePositionX.ToString();
 
-            if (mousePositionY > 0)
-            {
-                _gameManagerAim.DebugString.Values[13].Value = mousePositionY.ToString();
-            }
 
-            if (isDraggingState)
-            {
-                _gameManagerAim.DebugString.Values[13].Value = isDraggingState.ToString();
-            }
+            _gameManagerAim.DebugString.Values[13].Value = serverMousePositionY.ToString();
+
+
+            _gameManagerAim.DebugString.Values[14].Value = serverIsDraggingState.ToString();
         }
     }
 
     public void OnInputForClient(IInputWriter inputWriter)
     {
+        if (Elympics.Player != PredictableFor)
+            return;
         inputWriter.Write(mouseButtonState);
         inputWriter.Write(mousePositionX);
         inputWriter.Write(mousePositionY);
         inputWriter.Write(screenPositionX);
         inputWriter.Write(screenPositionY);
         inputWriter.Write(isDraggingState);
+        Debug.Log("ElympicsUpdate: " + mouseButtonState);
 
         //Log($"Input For Client - MouseButtonState: {mouseButtonState}, MousePosition: {mousePositionX}, {mousePositionY}, IsDragging: {isDraggingState}");
 

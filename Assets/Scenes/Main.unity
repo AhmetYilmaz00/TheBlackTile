@@ -1158,11 +1158,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &254014557 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1646149350436655533, guid: 047d8ae5143534434ae148de9defea6b, type: 3}
-  m_PrefabInstance: {fileID: 254014550}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &254014558 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1646149349380061436, guid: 047d8ae5143534434ae148de9defea6b, type: 3}
@@ -1184,9 +1179,6 @@ MonoBehaviour:
   ScoreText: {fileID: 2087548314}
   TotalMoveText: {fileID: 900814350}
   respect_TMP: {fileID: 254014556}
-  YesWallet: {fileID: 254014557}
-  NoWallet: {fileID: 91418180}
-  loadingIcon: {fileID: 1691071975}
 --- !u!1001 &279082315
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2012,7 +2004,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   score:
     currentValue: 0
-  scoreLocal: 0
   totalMoveCount: 0
   timerDuration: 180
   seedArray:
@@ -2539,6 +2530,7 @@ GameObject:
   - component: {fileID: 1231484127}
   - component: {fileID: 1231484126}
   - component: {fileID: 1231484125}
+  - component: {fileID: 1231484128}
   m_Layer: 0
   m_Name: DisplayManager
   m_TagString: Untagged
@@ -2587,8 +2579,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textRedColor: {r: 0.8392157, g: 0.12941177, b: 0.12941177, a: 1}
-  finalScoreText: {fileID: 0}
-  gameOverScreen: {fileID: 0}
+  _respectValueLabel: {fileID: 254014556}
+  YesWallet: {fileID: 1900032713}
+  NoWallet: {fileID: 91418180}
+  loadingIcon: {fileID: 1691071975}
 --- !u!4 &1231484127
 Transform:
   m_ObjectHideFlags: 0
@@ -2604,6 +2598,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1231484128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231484124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334c2a3facb248ac8c1a599797c52dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceNetworkId: 0
+  networkId: 15
+  predictableFor:
+    playerIndex: -3
+  isUpdatableForNonOwners: 0
+  visibleFor:
+    playerIndex: -3
+  stateFrequencyStages:
+  - stageDurationInMiliseconds: 500
+    frequencyInMiliseconds: 30
+    maxStageDurationInMiliseconds: 5000
+  - stageDurationInMiliseconds: 1000
+    frequencyInMiliseconds: 200
+    maxStageDurationInMiliseconds: 5000
+  - stageDurationInMiliseconds: 1000
+    frequencyInMiliseconds: 1000
+    maxStageDurationInMiliseconds: 5000
 --- !u!1 &1298022486
 GameObject:
   m_ObjectHideFlags: 0
@@ -3913,6 +3936,97 @@ Animation:
   m_PlayAutomatically: 1
   m_AnimatePhysics: 0
   m_CullingType: 0
+--- !u!1 &1819108683
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1819108686}
+  - component: {fileID: 1819108685}
+  - component: {fileID: 1819108684}
+  m_Layer: 0
+  m_Name: Input
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1819108684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819108683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 411fa2b16fef7a2418c0d74022e95627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mouseButtonState: 0
+  mousePositionX: 0
+  mousePositionY: 0
+  screenPositionX: 0
+  screenPositionY: 0
+  isDraggingState: 0
+  serverMouseButtonState: 0
+  serverMousePositionX: 0
+  serverMousePositionY: 0
+  serverScreenPositionX: 0
+  serverScreenPositionY: 0
+  serverIsDraggingState: 0
+--- !u!114 &1819108685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819108683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334c2a3facb248ac8c1a599797c52dae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  forceNetworkId: 0
+  networkId: 14
+  predictableFor:
+    playerIndex: 0
+  isUpdatableForNonOwners: 0
+  visibleFor:
+    playerIndex: -3
+  stateFrequencyStages:
+  - stageDurationInMiliseconds: 500
+    frequencyInMiliseconds: 30
+    maxStageDurationInMiliseconds: 5000
+  - stageDurationInMiliseconds: 1000
+    frequencyInMiliseconds: 200
+    maxStageDurationInMiliseconds: 5000
+  - stageDurationInMiliseconds: 1000
+    frequencyInMiliseconds: 1000
+    maxStageDurationInMiliseconds: 5000
+--- !u!4 &1819108686
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1819108683}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 540, y: 975, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1900032713 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1646149351085031997, guid: 047d8ae5143534434ae148de9defea6b, type: 3}
+  m_PrefabInstance: {fileID: 254014550}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1979524733
 GameObject:
   m_ObjectHideFlags: 0
@@ -4010,89 +4124,6 @@ MonoBehaviour:
   - stageDurationInMiliseconds: 1000
     frequencyInMiliseconds: 1000
     maxStageDurationInMiliseconds: 5000
---- !u!1 &2019804646
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2019804649}
-  - component: {fileID: 2019804648}
-  - component: {fileID: 2019804647}
-  m_Layer: 0
-  m_Name: Input
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2019804647
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019804646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 411fa2b16fef7a2418c0d74022e95627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mouseButtonState: 0
-  inputGetMouse: 0
-  inputMousePositionX: 0
-  inputMousePositionY: 0
-  isServer: 0
-  serverMouseButtonState: 0
-  serverInputGetMouse: 0
-  serverInputMousePositionX: 0
-  serverInputMousePositionY: 0
---- !u!114 &2019804648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019804646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 334c2a3facb248ac8c1a599797c52dae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forceNetworkId: 0
-  networkId: 7
-  predictableFor:
-    playerIndex: -3
-  isUpdatableForNonOwners: 0
-  visibleFor:
-    playerIndex: -3
-  stateFrequencyStages:
-  - stageDurationInMiliseconds: 500
-    frequencyInMiliseconds: 30
-    maxStageDurationInMiliseconds: 5000
-  - stageDurationInMiliseconds: 1000
-    frequencyInMiliseconds: 200
-    maxStageDurationInMiliseconds: 5000
-  - stageDurationInMiliseconds: 1000
-    frequencyInMiliseconds: 1000
-    maxStageDurationInMiliseconds: 5000
---- !u!4 &2019804649
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2019804646}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -111.79755, y: 701.8421, z: 36.5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2025608770
 GameObject:
   m_ObjectHideFlags: 0
@@ -4437,7 +4468,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ff5978b70ac7ba4a85f979e6d48e3a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Score: 0
   _debugPlaytime: 0
 --- !u!114 &2091981202
 MonoBehaviour:
@@ -4480,5 +4510,5 @@ SceneRoots:
   - {fileID: 1979524735}
   - {fileID: 811343013}
   - {fileID: 1656779538}
-  - {fileID: 2019804649}
   - {fileID: 1231484127}
+  - {fileID: 1819108686}

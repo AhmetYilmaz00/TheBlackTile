@@ -21,6 +21,8 @@ public class GameManager : SingletonBehaviour<GameManager>, IInitializable
     [NaughtyAttributes.ReadOnly] [SerializeField]
     private GameState _gameState;
 
+    private GameManagerAim _gameManagerAim;
+
     public LevelData CurrentLevelData;
 
 
@@ -55,7 +57,7 @@ public class GameManager : SingletonBehaviour<GameManager>, IInitializable
     {
         _gameState = GameState.Menu;
         GameState = GameState.Menu;
-
+        _gameManagerAim = FindObjectOfType<GameManagerAim>();
 
         //  StartCoroutine(StartLevelFromLevelData(Progress.levelData));
 
@@ -169,7 +171,7 @@ public class GameManager : SingletonBehaviour<GameManager>, IInitializable
 
     private void SaveLevelData()
     {
-        if (GameState == GameState.Gameplay && GuiGameplayPanel.instance.Score > 0)
+        if (GameState == GameState.Gameplay && _gameManagerAim.score.Value > 0)
         {
             Progress.isLevelDataSaved = true;
             Progress.levelData = CurrentLevelData;

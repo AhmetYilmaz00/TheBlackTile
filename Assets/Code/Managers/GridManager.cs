@@ -174,6 +174,7 @@ namespace Code.Managers
 
         public void PerformMerge(List<Block> selectedBlocks)
         {
+            _gameManagerAim.DebugString.Values[17].Value = "PerformMerge: " + selectedBlocks.Count;
 
             Messenger<List<Block>>.Broadcast(Message.OnMergeMoveStarted, selectedBlocks);
             StartCoroutine(MergeCoroutine(selectedBlocks));
@@ -240,7 +241,7 @@ namespace Code.Managers
                 }
 
                 _blocks[pos.x, pos.y] = null;
-
+                _gameManagerAim.DebugString.Values[11].Value = "Merged";
                 Messenger<Block>.Broadcast(Message.OnBlockMerged, selectedBlocks[blockToMergeIndex]);
                 if (selectedBlocks[blockToMergeIndex].IsMinusBlock)
                 {
@@ -267,6 +268,11 @@ namespace Code.Managers
                 {
                     defenderBlock.DestroyOnLose();
                     FeedbackManager.instance.BadFeedback();
+                    if (_gameManagerAim.IsServer())
+                    {
+                        _gameManagerAim.EndGame();
+                    }
+
                     this.Invoke(() => GameManager.instance.OnLevelLose(), 1.7f);
                     yield break;
                 }
@@ -448,7 +454,7 @@ namespace Code.Managers
             }
 
             levelData.MinusBlocksGenerated = MinusBlocksGenerated;
-            levelData.Score = GuiGameplayPanel.instance.Score;
+            levelData.Score = _gameManagerAim.score.Value;
 
 
             GameManager.instance.SaveToLevelData(levelData);

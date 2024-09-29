@@ -9,8 +9,7 @@ namespace Code.AIM_Studio
 {
     public class GameManagerAim : ElympicsMonoBehaviour, IUpdatable, IInitializable
     {
-        public ElympicsInt score;
-        public int scoreLocal;
+        public ElympicsInt score = new();
         public int totalMoveCount;
 
 
@@ -56,9 +55,8 @@ namespace Code.AIM_Studio
             var generatedSeed = 0;
             if (_isServer)
             {
-
                 generatedSeed = _seedCounter + DateTime.Now.Millisecond;
-                
+
                 seedArray.Values[_seedCounter].Value = generatedSeed;
                 Debug.Log("Sunucu tarafından belirlenen seed: " + generatedSeed);
             }
@@ -118,13 +116,31 @@ namespace Code.AIM_Studio
                 ClearAllData();
             }
 
+            if (_isServer)
+            {
+                DebugString.Values[15].Value = "Score: " + score.Value;
+            }
+            else
+            {
+//                Debug.Log("timer: " + timer.Value);
+            }
+
             if (timer.Value <= 0 && !_isFinishGame)
             {
-                timer.Value = 0;
                 _isFinishGame = true;
-                EndGame();
+
+                if (_isServer)
+                {
+                    timer.Value = 0;
+                    EndGame();
+                }
+                else
+                {
+                    GameManager.instance.OnLevelLose();
+                }
             }
-            else if (timer.Value > 0)
+
+            if (timer.Value > 0)
             {
                 if (_isServer)
                 {
@@ -150,15 +166,12 @@ namespace Code.AIM_Studio
             currentHandBlocks = 0;
         }
 
-        private void EndGame()
+        public void EndGame()
         {
-            if (Elympics.IsServer)
-            {
-                Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData>
-                    { new ResultMatchPlayerData { MatchmakerData = new float[1] { scoreLocal } } }));
-            }
+            Elympics.EndGame(new ResultMatchPlayerDatas(new List<ResultMatchPlayerData>
+                { new ResultMatchPlayerData { MatchmakerData = new float[1] { score.Value } } }));
 
-            GameManager.instance.OnLevelLose();
+
             // if (Elympics.IsClient)
             // {
             //     ElympicsExternalCommunicator.Instance.GameStatusCommunicator.GameFinished(scoreLocal);

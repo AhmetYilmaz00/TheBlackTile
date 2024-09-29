@@ -27,27 +27,19 @@ namespace Code.GUI
 
         public bool AnimsInProgress { get; private set; }
 
-        public int Score
-        {
-            get => _gameManagerAim.score.Value;
-            private set
-            {
-                _gameManagerAim.score.Value = value;
-                _gameManagerAim.scoreLocal = value;
-            } 
-        }
-
         private int _bestScore;
         private int _multiplier;
         private GameManagerAim _gameManagerAim;
 
-        private void Awake()
-        {
-            _gameManagerAim = FindObjectOfType<GameManagerAim>();
-        }
 
         private void OnEnable()
         {
+            _gameManagerAim = FindObjectOfType<GameManagerAim>();
+            if (_gameManagerAim.IsServer())
+            {
+                _gameManagerAim.DebugString.Values[12].Value = "OnEnable";
+            }
+
             Messenger<Block>.AddListener(Message.OnBlockMerged, OnBlockMerged);
             Messenger<List<Block>>.AddListener(Message.OnMergeMoveStarted, OnMergeMoveStarted);
 
@@ -133,16 +125,21 @@ namespace Code.GUI
 
         private void AddToScore(int additionalScore)
         {
-            _gameManagerAim.totalMoveCount++;
-            Score += additionalScore;
+            if (_gameManagerAim.IsServer())
+            {
+                _gameManagerAim.totalMoveCount++;
+                _gameManagerAim.DebugString.Values[16].Value = "AddToScore: " + _gameManagerAim.score.Value;
+                _gameManagerAim.score.Value += additionalScore;
+            }
+Debug.Log("Scccore: "+ _gameManagerAim.score.Value);
             var addPointTextController = Instantiate(addPointTextObject, addPointTextParent);
             addPointTextController.GetComponent<AddPointTextController>()
-                .AddPointEffectStart(additionalScore.ToString(), ScoreText, Score);
+                .AddPointEffectStart(additionalScore.ToString(), ScoreText);
 
             //  ScoreText.text = Score.ToString();
-            if (Score > _bestScore)
+            if (_gameManagerAim.score.Value > _bestScore)
             {
-                BestScoreText.text = Score.ToString();
+                BestScoreText.text = _gameManagerAim.score.Value.ToString();
             }
         }
     }

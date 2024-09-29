@@ -62,13 +62,11 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
             _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
         }
 
-        _gameManagerAim.DebugString.Values[6].Value = Input.mousePosition.x.ToString();
-        _gameManagerAim.DebugString.Values[7].Value = Input.mousePosition.y.ToString();
-        if (_playerInputControllerAim.mouseButtonState == 1)
+        if (_playerInputControllerAim.serverMouseButtonState == 1)
         {
             _gameManagerAim.DebugString.Values[8].Value = 1.ToString();
         }
-        else if (_playerInputControllerAim.mouseButtonState == 2)
+        else if (_playerInputControllerAim.serverMouseButtonState == 2)
         {
             _gameManagerAim.DebugString.Values[9].Value = 2.ToString();
         }
@@ -89,19 +87,27 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
             return;
         }
 
-        if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.mouseButtonState == 2)
+        if (_gameManagerAim.IsServer())
+        {
+            _gameManagerAim.DebugString.Values[9].Value = _playerInputControllerAim.serverMouseButtonState.ToString();
+        }
+
+        if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
         {
             Debug.Log(" _playerInputControllerAim.serverMouseButtonState == 2");
-            if (_gameManagerAim.IsServer())
-            {
-                _gameManagerAim.DebugString.Values[10].Value = 2.ToString();
-            }
+            
+                if (!_inputHeld)
+                    return;
+            
 
-            if (!_inputHeld)
-                return;
             if (selectedBlocks.Count > 1)
             {
                 _gridManager.DefenderBlock.SetSelected(false);
+                if (_gameManagerAim.IsServer())
+                {
+                    _gameManagerAim.DebugString.Values[16].Value = "_gridManager.DefenderBlock.SetSelected(false);";
+                }
+
                 _gameManagerAim.currentHandBlocks = selectedBlocks.Count;
                 _gridManager.PerformMerge(selectedBlocks);
             }
@@ -117,28 +123,46 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
             _gridManager.DefenderBlock.ClearNumberPreview();
             selectedBlocks = new List<Block>();
         }
-        else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.mouseButtonState == 1)
+        else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverMouseButtonState == 1)
         {
-            _playerInputControllerAim.mouseButtonState = 0;
+            _playerInputControllerAim.serverMouseButtonState = 0;
             RaycastHit blockHit;
+            var input = new Vector3(_playerInputControllerAim.serverMousePositionX,
+                _playerInputControllerAim.serverMousePositionY, 0);
+            int screenWidth = Screen.width;
+            int screenHeight = Screen.height;
             if (_gameManagerAim.IsServer())
             {
-                blockHit = PerformRaycast(
-                    new Vector3(_playerInputControllerAim.mousePositionX,
-                        _playerInputControllerAim.mousePositionY, 0), _blockLayerMask);
+                _gameManagerAim.DebugString.Values[19].Value = input.ToString();
+                _gameManagerAim.DebugString.Values[20].Value = "w: " + screenWidth + " h: " + screenHeight;
+                blockHit = PerformRaycast(input, _blockLayerMask);
 
                 _gameManagerAim.ClearAllData();
             }
             else
             {
-                blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+                blockHit = PerformRaycast(input, _blockLayerMask);
+                Debug.Log(Input.mousePosition);
+                Debug.Log("w: " + screenWidth + " h: " + screenHeight);
             }
 
             if (blockHit.collider == null)
             {
+                Debug.Log("blockHit.collider is Null ");
+                if (_gameManagerAim.IsServer())
+                {
+                    _gameManagerAim.DebugString.Values[18].Value = "blockHit.collider is Null ";
+                }
+
                 _inputHeld = false;
                 return;
             }
+
+            if (_gameManagerAim.IsServer())
+            {
+                _gameManagerAim.DebugString.Values[18].Value = "is NOT NUL ";
+            }
+
 
             var selectedBlock = blockHit.collider.GetComponent<Block>();
 
@@ -166,21 +190,27 @@ public class InputManager : SingletonBehaviour<InputManager>, IInitializable
                 _inputHeld = false;
             }
         }
-        else if (Input.GetMouseButton(0) || _playerInputControllerAim.isDraggingState)
+        else if (Input.GetMouseButton(0) || _playerInputControllerAim.serverIsDraggingState)
         {
-            if (!_inputHeld)
-                return;
+            _gameManagerAim.DebugString.Values[7].Value = "_inputHeld = " + _inputHeld;
+            
+                if (!_inputHeld)
+                    return;
+            
+
 
             RaycastHit blockHit;
             if (_gameManagerAim.IsServer())
             {
+                _gameManagerAim.DebugString.Values[6].Value = "blockHit.ToString();";
+
                 blockHit = PerformRaycast(
-                    new Vector3(_playerInputControllerAim.mousePositionX,
-                        _playerInputControllerAim.mousePositionY, 0), _blockLayerMask);
+                    new Vector3(_playerInputControllerAim.serverMousePositionX,
+                        _playerInputControllerAim.serverMousePositionY, 0), _blockLayerMask);
             }
             else
             {
-                _playerInputControllerAim.isDraggingState = true;
+                _playerInputControllerAim.serverIsDraggingState = true;
                 blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
             }
 

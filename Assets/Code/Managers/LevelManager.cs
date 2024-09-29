@@ -10,7 +10,6 @@ using UnityEngine;
 
 public class LevelManager : SingletonBehaviour<LevelManager>
 {
-    public int Score;
     public bool CanSpawnMultiplier { get; private set; }
 
     private BBTime _multiplierTimer;
@@ -51,7 +50,6 @@ public class LevelManager : SingletonBehaviour<LevelManager>
         if (GuiGameplayPanel.instance == null)
             return;
 
-        Score = GuiGameplayPanel.instance.Score;
     }
 
     internal void OnMultiplierSpawned()

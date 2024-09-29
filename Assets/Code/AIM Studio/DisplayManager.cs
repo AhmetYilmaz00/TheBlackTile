@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using AIMStudio.Scripts;
 using ChocDino.UIFX;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -10,14 +12,17 @@ using UnityEngine.SceneManagement;
 
 namespace Code.AIM_Studio
 {
-    public class DisplayManager : MonoBehaviour
+    public class DisplayManager : ElympicsMonoBehaviour
     {
         [SerializeField] private Color textRedColor;
-        [SerializeField] private TMP_Text finalScoreText;
-        [SerializeField] private GameObject gameOverScreen;
+        [SerializeField] private TextMeshProUGUI _respectValueLabel;
+
         private TMP_Text _timerText;
         private bool _isStartRedTime;
-
+        private long respectPoints;
+        public GameObject YesWallet;
+        public GameObject NoWallet;
+        public GameObject loadingIcon;
 
         public void FindTimerText()
         {
@@ -76,6 +81,33 @@ namespace Code.AIM_Studio
                 .MatchData!.MatchId;
             var respectValue = await respectService.GetRespectForMatch(matchID);
             respectText.text = respectValue.Respect.ToString();
+        }
+
+        public async void GetRespect()
+        {
+            var respectService = new RespectService(ElympicsLobbyClient.Instance, ElympicsConfig.Load());
+            // we assume here that the game allows for being in only one match at time
+
+            //ElympicsLobbyClient.Instance.RoomsManager.MatchDataReceived
+
+            if (!ElympicsAuthenticationHandler.instance.IsGuest())
+            {
+                var matchID = ElympicsLobbyClient.Instance.RoomsManager.ListJoinedRooms()[0].State.MatchmakingData!
+                    .MatchData!.MatchId;
+
+                var respectValue = await respectService.GetRespectForMatch(matchID);
+                loadingIcon.SetActive(false);
+                respectPoints = respectValue.Respect;
+                _respectValueLabel.text = respectPoints.ToString();
+
+                YesWallet.SetActive(true);
+                NoWallet.SetActive(false);
+            }
+            else
+            {
+                YesWallet.SetActive(false);
+                NoWallet.SetActive(true);
+            }
         }
     }
 }
