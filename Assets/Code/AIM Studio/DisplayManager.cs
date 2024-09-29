@@ -85,17 +85,17 @@ namespace Code.AIM_Studio
 
         public async void GetRespect()
         {
-            var respectService = new RespectService(ElympicsLobbyClient.Instance, ElympicsConfig.Load());
             // we assume here that the game allows for being in only one match at time
 
-            //ElympicsLobbyClient.Instance.RoomsManager.MatchDataReceived
 
             if (!ElympicsAuthenticationHandler.instance.IsGuest())
             {
-                var matchID = ElympicsLobbyClient.Instance.RoomsManager.ListJoinedRooms()[0].State.MatchmakingData!
-                    .MatchData!.MatchId;
+                var respectService = new RespectService(ElympicsLobbyClient.Instance, ElympicsConfig.Load());
+                var matchId =
+                    ElympicsLobbyClient.Instance.RoomsManager.ListAvailableRooms().First().State.MatchmakingData!
+                        .MatchData!.MatchId;
 
-                var respectValue = await respectService.GetRespectForMatch(matchID);
+                var respectValue = await respectService.GetRespectForMatch(matchId);
                 loadingIcon.SetActive(false);
                 respectPoints = respectValue.Respect;
                 _respectValueLabel.text = respectPoints.ToString();

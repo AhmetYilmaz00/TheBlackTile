@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Elympics;
-using ElympicsLobbyPackage;
 using UnityEngine;
 
 namespace Code.AIM_Studio
@@ -27,11 +26,22 @@ namespace Code.AIM_Studio
         public List<int> seedArrayClient = new();
         private bool _isServer;
         private bool _isFinishGame;
+        
+        public Guid matchID;
 
+  
+
+        private void OnMatchDataReceived(MatchDataReceivedArgs args)
+        {
+            matchID = args.MatchId;
+            Debug.Log("Match data received: " + matchID); // args içindeki verilere göre işlemler yapılır
+        }
 
         private void Start()
         {
             displayManager = FindObjectOfType<DisplayManager>();
+            ElympicsLobbyClient.Instance.RoomsManager.MatchDataReceived += OnMatchDataReceived;
+
         }
 
         public void Initialize()
@@ -39,7 +49,6 @@ namespace Code.AIM_Studio
             timer.Value = timerDuration;
             seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
             DebugString = new ElympicsArray<ElympicsString>(100, () => new ElympicsString());
-
             _isServer = Elympics.IsServer;
             // if (Elympics.IsClient)
             // {
