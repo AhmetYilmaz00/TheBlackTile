@@ -26,10 +26,10 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
     public float serverScreenPositionY;
     public bool serverIsDraggingState;
 
-    float oldXMin = 123f, oldXMax = 956f;
+    // float oldXMin = 123f, oldXMax = 956f;
     float newXMin = 216f, newXMax = 424f;
 
-    float oldYMin = 102f, oldYMax = 1637f;
+    //float oldYMin = 102f, oldYMax = 1637f;
     float newYMin = 27f, newYMax = 407f;
 
 
@@ -75,6 +75,8 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
         mousePositionY = Input.mousePosition.y;
         screenPositionX = screenPos.x;
         screenPositionY = screenPos.y;
+
+        Debug.Log("X: " + mousePositionX + " Y: " + mousePositionY);
     }
 
     private void Start()
@@ -110,13 +112,12 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
 
 
         // X ve Y değerlerini dönüştürme
-        float newX = RescaleValue(mousePositionX, oldXMin, oldXMax, newXMin, newXMax);
-        float newY = RescaleValue(mousePositionY, oldYMin, oldYMax, newYMin, newYMax);
 
 
+        var newGridSize = ScreenReSize();
         inputWriter.Write(mouseButtonState);
-        inputWriter.Write(newX);
-        inputWriter.Write(newY);
+        inputWriter.Write(newGridSize.x);
+        inputWriter.Write(newGridSize.y);
         inputWriter.Write(screenPositionX);
         inputWriter.Write(screenPositionY);
         inputWriter.Write(isDraggingState);
@@ -124,6 +125,21 @@ public class PlayerInputControllerAim : ElympicsMonoBehaviour, IInputHandler, IU
         //Log($"Input For Client - MouseButtonState: {mouseButtonState}, MousePosition: {mousePositionX}, {mousePositionY}, IsDragging: {isDraggingState}");
 
         mouseButtonState = 0;
+    }
+
+    private Vector2 ScreenReSize()
+    {
+        var blocksHeight = Screen.height * 0.8f;
+        var aPartHeight = (Screen.height - blocksHeight) / 4;
+        var blocksWeight = blocksHeight / 1.826f;
+        var minY = aPartHeight;
+        var maxY = aPartHeight + blocksHeight;
+        var minX = (Screen.width / 2) - (blocksWeight / 2);
+        var maxX = (Screen.width / 2) + (blocksWeight / 2);
+
+        var newX = RescaleValue(mousePositionX, minX, maxX, newXMin, newXMax);
+        var newY = RescaleValue(mousePositionY, minY, maxY, newYMin, newYMax);
+        return new Vector2(newX, newY);
     }
 
     public void StartDrag()

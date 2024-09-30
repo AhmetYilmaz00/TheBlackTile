@@ -254,17 +254,17 @@ public class LeaderboardsDisplayer : MonoBehaviour
     private void ShowBestScore(int score)
     {
         if (ElympicsAuthenticationHandler.instance.GetPlayQueue() == "training")
-            bestScoreText.text = score.ToString();
+            bestScoreText.text = "Best Score: " + score;
         else
-            bestScoreText.text = score.ToString();
-        
+            bestScoreText.text = "Best Score: " + score;
+
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 
     private void HideBestScore()
     {
-        bestScoreText.text = "0";
+        bestScoreText.text = "Best Score: 0";
         LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 

@@ -62,7 +62,7 @@ namespace AIMStudio.Scripts
             {
                 var nickname = ElympicsAuthenticationHandler.instance.GetPlayerName();
                 nicknameText.text = nickname;
-                nicknameText2.text = nickname;
+             //   nicknameText2.text = nickname;
                 if (ElympicsAuthenticationHandler.instance.IsEthAddressShowable())
                 {
                     string ethAddress = ElympicsAuthenticationHandler.instance.GetPlayerEthAddress();
@@ -87,7 +87,7 @@ namespace AIMStudio.Scripts
         {
             //ADD COROUTINE / ANIMATION HERE
             nicknameText.gameObject.SetActive(false);
-            nicknameText2.gameObject.SetActive(false);
+           // nicknameText2.gameObject.SetActive(false);
             walletAdressText.gameObject.SetActive(false);
         }
 
@@ -95,7 +95,7 @@ namespace AIMStudio.Scripts
         {
             //ADD COROUTINE / ANIMATION HERE
             nicknameText.gameObject.SetActive(true);
-            nicknameText2.gameObject.SetActive(true);
+          //  nicknameText2.gameObject.SetActive(true);
             walletAdressText.gameObject.SetActive(true);
         }
     }
