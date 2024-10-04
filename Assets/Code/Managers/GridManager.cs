@@ -174,8 +174,6 @@ namespace Code.Managers
 
         public void PerformMerge(List<Block> selectedBlocks)
         {
-            _gameManagerAim.DebugString.Values[17].Value = "PerformMerge: " + selectedBlocks.Count;
-
             Messenger<List<Block>>.Broadcast(Message.OnMergeMoveStarted, selectedBlocks);
             StartCoroutine(MergeCoroutine(selectedBlocks));
         }
@@ -241,7 +239,6 @@ namespace Code.Managers
                 }
 
                 _blocks[pos.x, pos.y] = null;
-                _gameManagerAim.DebugString.Values[11].Value = "Merged";
                 Messenger<Block>.Broadcast(Message.OnBlockMerged, selectedBlocks[blockToMergeIndex]);
                 if (selectedBlocks[blockToMergeIndex].IsMinusBlock)
                 {
@@ -465,7 +462,6 @@ namespace Code.Managers
         public void GenerteGridRandom()
         {
             _gameManagerAim = FindObjectOfType<GameManagerAim>();
-            _gameManagerAim.DebugString.Values[3].Value = " GenerteGridRandom";
 
             transform.position = Vector3.zero;
             Vector2Int gridSize = GameplayConfiguration.instance.GridSize;
@@ -482,15 +478,12 @@ namespace Code.Managers
                     Block block;
                     if (x == defenderPos.x && y == defenderPos.y)
                     {
-                        _gameManagerAim.DebugString.Values[4].Value = " GetDefenderBlock()";
 
                         block = GetDefenderBlock();
                         DefenderBlock = block;
                     }
                     else
                     {
-                        _gameManagerAim.DebugString.Values[5].Value = " GetRandomBlock()";
-
                         block = GetRandomBlock();
                     }
 

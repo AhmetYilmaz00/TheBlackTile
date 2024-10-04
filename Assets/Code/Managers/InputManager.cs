@@ -1,309 +1,276 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using AIMStudio.Scripts;
 using Code.AIM_Studio;
-using Code.Managers;
 using Elympics;
 using UnityEngine;
 
-public class InputManager : SingletonBehaviour<InputManager>, IInitializable
+namespace Code.Managers
 {
-    public LineRenderer LineRenderer;
-    public bool inputWait;
-    private GameManagerAim _gameManagerAim;
-
-    private LayerMask _blockLayerMask;
-
-    [SerializeField] private List<Block> selectedBlocks;
-    private Block _lastSelected;
-    private bool _inputHeld;
-
-    private IGridManager _gridManager;
-    private PlayerInputControllerAim _playerInputControllerAim;
-
-    public void Initialize()
+    public class InputManager : SingletonBehaviour<InputManager>, IInitializable
     {
-        _gameManagerAim = FindObjectOfType<GameManagerAim>();
-        _blockLayerMask = LayerMask.GetMask(Layers.BLOCK);
-        Messenger<GameState, GameState>.AddListener(Message.PreGameStateChange, OnGameStatePreChange);
-        _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
-    }
+        public LineRenderer LineRenderer;
+        public bool inputWait;
+        private GameManagerAim _gameManagerAim;
 
-    private void OnDisable()
-    {
-        Messenger<GameState, GameState>.RemoveListener(Message.PreGameStateChange, OnGameStatePreChange);
-    }
+        private LayerMask _blockLayerMask;
 
-    public void OnGameStatePreChange(GameState newGameState, GameState previousGameState)
-    {
-        if (newGameState == GameState.Gameplay)
-        {
-            selectedBlocks = new List<Block>();
-            _gridManager = GridManager.instance;
-        }
-        else if (newGameState == GameState.Tutorial)
-        {
-            selectedBlocks = new List<Block>();
-            _gridManager = TutorialGridManager.instance;
-        }
-        else if (newGameState == GameState.GameOverLose)
-        {
-            UpdateLineRenderer(new List<Block>());
-        }
-    }
+        [SerializeField] private List<Block> selectedBlocks;
+        private Block _lastSelected;
+        private bool _inputHeld;
 
+        private IGridManager _gridManager;
+        private PlayerInputControllerAim _playerInputControllerAim;
 
-    private void Update()
-    {
-        if (!_playerInputControllerAim)
+        public void Initialize()
         {
+            _gameManagerAim = FindObjectOfType<GameManagerAim>();
+            _blockLayerMask = LayerMask.GetMask(Layers.BLOCK);
+            Messenger<GameState, GameState>.AddListener(Message.PreGameStateChange, OnGameStatePreChange);
             _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
         }
 
-        if (_playerInputControllerAim.serverMouseButtonState == 1)
+        private void OnDisable()
         {
-            _gameManagerAim.DebugString.Values[8].Value = 1.ToString();
-        }
-        else if (_playerInputControllerAim.serverMouseButtonState == 2)
-        {
-            _gameManagerAim.DebugString.Values[9].Value = 2.ToString();
+            Messenger<GameState, GameState>.RemoveListener(Message.PreGameStateChange, OnGameStatePreChange);
         }
 
-
-        if (GameManager.instance.GameState != GameState.Gameplay &&
-            GameManager.instance.GameState != GameState.Tutorial)
-            return;
-
-        if (_gridManager.AnimationsPlaying)
+        public void OnGameStatePreChange(GameState newGameState, GameState previousGameState)
         {
-            Debug.Log("_gridManager.AnimationsPlaying: RETURN");
-            return;
+            if (newGameState == GameState.Gameplay)
+            {
+                selectedBlocks = new List<Block>();
+                _gridManager = GridManager.instance;
+            }
+            else if (newGameState == GameState.Tutorial)
+            {
+                selectedBlocks = new List<Block>();
+                _gridManager = TutorialGridManager.instance;
+            }
+            else if (newGameState == GameState.GameOverLose)
+            {
+                UpdateLineRenderer(new List<Block>());
+            }
         }
 
-        if (inputWait)
-        {
-            return;
-        }
 
-        if (_gameManagerAim.IsServer())
+        private void Update()
         {
-            _gameManagerAim.DebugString.Values[9].Value = _playerInputControllerAim.serverMouseButtonState.ToString();
-        }
+            if (!_playerInputControllerAim)
+            {
+                _playerInputControllerAim = FindObjectOfType<PlayerInputControllerAim>();
+            }
 
-        if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
-        {
-            Debug.Log(" _playerInputControllerAim.serverMouseButtonState == 2");
 
-            if (!_inputHeld)
+            if (GameManager.instance.GameState != GameState.Gameplay &&
+                GameManager.instance.GameState != GameState.Tutorial)
                 return;
-
-
-            if (selectedBlocks.Count > 1)
+            if (_gridManager.AnimationsPlaying)
             {
-                _gridManager.DefenderBlock.SetSelected(false);
-                if (_gameManagerAim.IsServer())
-                {
-                    _gameManagerAim.DebugString.Values[16].Value = "_gridManager.DefenderBlock.SetSelected(false);";
-                }
-
-                _gameManagerAim.currentHandBlocks = selectedBlocks.Count;
-                _gridManager.PerformMerge(selectedBlocks);
+                return;
             }
-            else
+            
+            if (inputWait)
             {
-                FeedbackManager.instance.BadFeedback();
-                for (int i = 0; i < selectedBlocks.Count; i++)
-                {
-                    selectedBlocks[i].SetSelected(false);
-                }
-            }
-
-            _gridManager.DefenderBlock.ClearNumberPreview();
-            selectedBlocks = new List<Block>();
-        }
-        else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverMouseButtonState == 1)
-        {
-            _playerInputControllerAim.serverMouseButtonState = 0;
-            RaycastHit blockHit;
-            if (_gameManagerAim.IsServer())
-            {
-                var input = new Vector3(_playerInputControllerAim.serverMousePositionX,
-                    _playerInputControllerAim.serverMousePositionY, 0);
-                blockHit = PerformRaycast(input, _blockLayerMask);
-
-                _gameManagerAim.ClearAllData();
-            }
-            else
-            {
-                blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
-            }
-
-            if (blockHit.collider == null)
-            {
-                Debug.Log("blockHit.collider is Null ");
-                if (_gameManagerAim.IsServer())
-                {
-                    _gameManagerAim.DebugString.Values[18].Value = "blockHit.collider is Null ";
-                }
-
-                _inputHeld = false;
                 return;
             }
 
-            if (_gameManagerAim.IsServer())
+            if (Input.GetMouseButtonUp(0) || _playerInputControllerAim.serverMouseButtonState == 2)
             {
-                _gameManagerAim.DebugString.Values[18].Value = "is NOT NUL ";
-            }
+                if (!_inputHeld)
+                    return;
 
 
-            var selectedBlock = blockHit.collider.GetComponent<Block>();
-
-            if (selectedBlock.IsDefender || _gridManager.AreNeighbours(selectedBlock, _gridManager.DefenderBlock))
-            {
-                if (!selectedBlock.IsDefender)
+                if (selectedBlocks.Count > 1)
                 {
-                    selectedBlocks.Add(_gridManager.DefenderBlock);
-                    _gridManager.DefenderBlock.SetSelected(true);
-                }
-
-                if (!selectedBlocks.Contains(selectedBlock))
-                {
-                    selectedBlocks.Add(selectedBlock);
-                    selectedBlock.SetSelected(true);
-                    _lastSelected = selectedBlock;
-                    FeedbackManager.instance.LightFeedback();
-                    UpdateLineRenderer();
-                    _inputHeld = true;
-                }
-            }
-            else
-            {
-                FeedbackManager.instance.BadFeedback();
-                _inputHeld = false;
-            }
-        }
-        else if (Input.GetMouseButton(0) || _playerInputControllerAim.serverIsDraggingState)
-        {
-            _gameManagerAim.DebugString.Values[7].Value = "_inputHeld = " + _inputHeld;
-
-            if (!_inputHeld)
-                return;
-
-
-            RaycastHit blockHit;
-            if (_gameManagerAim.IsServer())
-            {
-                _gameManagerAim.DebugString.Values[6].Value = "blockHit.ToString();";
-
-                blockHit = PerformRaycast(
-                    new Vector3(_playerInputControllerAim.serverMousePositionX,
-                        _playerInputControllerAim.serverMousePositionY, 0), _blockLayerMask);
-            }
-            else
-            {
-                _playerInputControllerAim.serverIsDraggingState = true;
-                blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
-            }
-
-            if (blockHit.collider == null)
-                return;
-
-            var selectedBlock = blockHit.collider.GetComponent<Block>();
-            if (selectedBlock == _lastSelected)
-                return;
-
-            if (selectedBlocks.Contains(selectedBlock))
-            {
-                //przedostatni
-                if (selectedBlocks.IndexOf(selectedBlock) == selectedBlocks.Count - 2)
-                {
-                    selectedBlocks[selectedBlocks.Count - 1].SetSelected(false);
-                    selectedBlocks.RemoveAt(selectedBlocks.Count - 1);
-                    _lastSelected = selectedBlock;
-                    UpdateLineRenderer();
-                    FeedbackManager.instance.LightFeedback();
-
-                    var firstAnimator = selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
-                    for (int i = 0; i < selectedBlocks.Count; i++)
-                    {
-                        selectedBlocks[i].Animator.Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
-                    }
-                }
-            }
-            else
-            {
-                if (_gridManager.AreNeighbours(selectedBlock, _lastSelected) && CanSelect(selectedBlock))
-                {
-                    selectedBlock.SetSelected(true);
-                    selectedBlocks.Add(selectedBlock);
-                    _lastSelected = selectedBlock;
-                    UpdateLineRenderer();
-                    FeedbackManager.instance.LightFeedback();
-
-                    var firstAnimator = selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
-                    for (int i = 0; i < selectedBlocks.Count; i++)
-                    {
-                        selectedBlocks[i].Animator.Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
-                    }
-                }
-            }
-
-            if (selectedBlocks.Any())
-            {
-                if (selectedBlocks[0] == _gridManager.DefenderBlock)
-                {
-                    selectedBlocks[0].SetupNumberPreviewOnly(selectedBlocks);
+                    _gridManager.DefenderBlock.SetSelected(false);
+                    _gameManagerAim.currentHandBlocks = selectedBlocks.Count;
+                    _gridManager.PerformMerge(selectedBlocks);
                 }
                 else
                 {
-                    selectedBlocks.Clear();
+                    FeedbackManager.instance.BadFeedback();
+                    for (int i = 0; i < selectedBlocks.Count; i++)
+                    {
+                        selectedBlocks[i].SetSelected(false);
+                    }
+                }
+
+                _gridManager.DefenderBlock.ClearNumberPreview();
+                selectedBlocks = new List<Block>();
+            }
+            else if (Input.GetMouseButtonDown(0) || _playerInputControllerAim.serverMouseButtonState == 1)
+            {
+                _playerInputControllerAim.serverMouseButtonState = 0;
+                RaycastHit blockHit;
+                if (_gameManagerAim.IsServer())
+                {
+                    var input = new Vector3(_playerInputControllerAim.serverMousePositionX,
+                        _playerInputControllerAim.serverMousePositionY, 0);
+                    blockHit = PerformRaycast(input, _blockLayerMask);
+
+                    _gameManagerAim.ClearAllData();
+                }
+                else
+                {
+                    blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+                }
+
+                if (blockHit.collider == null)
+                {
+                    Debug.Log("blockHit.collider is Null ");
+
+
+                    _inputHeld = false;
+                    return;
+                }
+
+
+                var selectedBlock = blockHit.collider.GetComponent<Block>();
+
+                if (selectedBlock
+                    .IsDefender) // || _gridManager.AreNeighbours(selectedBlock, _gridManager.DefenderBlock))
+                {
+                    if (!selectedBlock.IsDefender)
+                    {
+                        selectedBlocks.Add(_gridManager.DefenderBlock);
+                        _gridManager.DefenderBlock.SetSelected(true);
+                    }
+
+                    if (!selectedBlocks.Contains(selectedBlock))
+                    {
+                        selectedBlocks.Add(selectedBlock);
+                        selectedBlock.SetSelected(true);
+                        _lastSelected = selectedBlock;
+                        FeedbackManager.instance.LightFeedback();
+                        UpdateLineRenderer();
+                        _inputHeld = true;
+                    }
+                }
+                else
+                {
+                    FeedbackManager.instance.BadFeedback();
+                    _inputHeld = false;
+                }
+            }
+            else if (Input.GetMouseButton(0) || _playerInputControllerAim.serverIsDraggingState)
+            {
+                if (!_inputHeld)
+                    return;
+
+
+                RaycastHit blockHit;
+                if (_gameManagerAim.IsServer())
+                {
+                    blockHit = PerformRaycast(
+                        new Vector3(_playerInputControllerAim.serverMousePositionX,
+                            _playerInputControllerAim.serverMousePositionY, 0), _blockLayerMask);
+                }
+                else
+                {
+                    _playerInputControllerAim.serverIsDraggingState = true;
+                    blockHit = PerformRaycast(Input.mousePosition, _blockLayerMask);
+                }
+
+                if (blockHit.collider == null)
+                    return;
+
+                var selectedBlock = blockHit.collider.GetComponent<Block>();
+                if (selectedBlock == _lastSelected)
+                    return;
+
+                if (selectedBlocks.Contains(selectedBlock))
+                {
+                    //przedostatni
+                    if (selectedBlocks.IndexOf(selectedBlock) == selectedBlocks.Count - 2)
+                    {
+                        selectedBlocks[selectedBlocks.Count - 1].SetSelected(false);
+                        selectedBlocks.RemoveAt(selectedBlocks.Count - 1);
+                        _lastSelected = selectedBlock;
+                        UpdateLineRenderer();
+                        FeedbackManager.instance.LightFeedback();
+
+                        var firstAnimator = selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
+                        for (int i = 0; i < selectedBlocks.Count; i++)
+                        {
+                            selectedBlocks[i].Animator
+                                .Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
+                        }
+                    }
+                }
+                else
+                {
+                    if (_gridManager.AreNeighbours(selectedBlock, _lastSelected) && CanSelect(selectedBlock))
+                    {
+                        selectedBlock.SetSelected(true);
+                        selectedBlocks.Add(selectedBlock);
+                        _lastSelected = selectedBlock;
+                        UpdateLineRenderer();
+                        FeedbackManager.instance.LightFeedback();
+
+                        var firstAnimator = selectedBlocks[0].Animator.GetCurrentAnimatorStateInfo(0);
+                        for (int i = 0; i < selectedBlocks.Count; i++)
+                        {
+                            selectedBlocks[i].Animator
+                                .Play(firstAnimator.fullPathHash, 0, firstAnimator.normalizedTime);
+                        }
+                    }
+                }
+
+                if (selectedBlocks.Any())
+                {
+                    if (selectedBlocks[0] == _gridManager.DefenderBlock)
+                    {
+                        selectedBlocks[0].SetupNumberPreviewOnly(selectedBlocks);
+                    }
+                    else
+                    {
+                        selectedBlocks.Clear();
+                    }
                 }
             }
         }
-    }
 
-    private void UpdateLineRenderer()
-    {
-        UpdateLineRenderer(selectedBlocks);
-    }
-
-    public void UpdateLineRenderer(List<Block> blocks)
-    {
-        if (blocks.Count < 2)
+        private void UpdateLineRenderer()
         {
-            LineRenderer.enabled = false;
-            return;
+            UpdateLineRenderer(selectedBlocks);
         }
 
-        var linePositions = new List<Vector3>();
-
-        for (int i = 0; i < blocks.Count; i++)
+        public void UpdateLineRenderer(List<Block> blocks)
         {
-            linePositions.Add(blocks[i].transform.position + GameplayConfiguration.instance.LineOffset);
+            if (blocks.Count < 2)
+            {
+                LineRenderer.enabled = false;
+                return;
+            }
+
+            var linePositions = new List<Vector3>();
+
+            for (int i = 0; i < blocks.Count; i++)
+            {
+                linePositions.Add(blocks[i].transform.position + GameplayConfiguration.instance.LineOffset);
+            }
+
+            LineRenderer.positionCount = linePositions.Count;
+            LineRenderer.SetPositions(linePositions.ToArray());
+            LineRenderer.enabled = true;
         }
 
-        LineRenderer.positionCount = linePositions.Count;
-        LineRenderer.SetPositions(linePositions.ToArray());
-        LineRenderer.enabled = true;
-    }
+        private bool CanSelect(Block blockToSelect)
+        {
+            if (_lastSelected.IsDefender || _lastSelected.IsMinusBlock || _lastSelected.IsMultiplier)
+                return true;
+            else
+                return blockToSelect.Number == _lastSelected.Number || blockToSelect.Number == _lastSelected.Number + 1
+                                                                    || blockToSelect.IsMinusBlock ||
+                                                                    blockToSelect.IsMultiplier;
+        }
 
-    private bool CanSelect(Block blockToSelect)
-    {
-        if (_lastSelected.IsDefender || _lastSelected.IsMinusBlock || _lastSelected.IsMultiplier)
-            return true;
-        else
-            return blockToSelect.Number == _lastSelected.Number || blockToSelect.Number == _lastSelected.Number + 1
-                                                                || blockToSelect.IsMinusBlock ||
-                                                                blockToSelect.IsMultiplier;
-    }
-
-    private RaycastHit PerformRaycast(Vector3 mousePos, LayerMask layerMask)
-    {
-        var ray = Camera.main.ScreenPointToRay(mousePos);
-        RaycastHit hit;
-        Physics.SphereCast(ray, 0.3f, out hit, 200, layerMask);
-        return hit;
+        private RaycastHit PerformRaycast(Vector3 mousePos, LayerMask layerMask)
+        {
+            var ray = Camera.main.ScreenPointToRay(mousePos);
+            RaycastHit hit;
+            Physics.SphereCast(ray, 0.3f, out hit, 200, layerMask);
+            return hit;
+        }
     }
 }

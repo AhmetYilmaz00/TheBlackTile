@@ -74,7 +74,6 @@ public class GameManager : SingletonBehaviour<GameManager>, IInitializable
     {
         if (gameManagerAim.IsServer())
         {
-            gameManagerAim.DebugString.Values[0].Value = " StartLevel();";
             StartLevel();
         }
     }
@@ -110,8 +109,6 @@ public class GameManager : SingletonBehaviour<GameManager>, IInitializable
 
     private void LoadLevel()
     {
-        gameManagerAim.DebugString.Values[1].Value = " LoadLevel()";
-
         LevelManager.instance.GenerateLevel();
     }
 

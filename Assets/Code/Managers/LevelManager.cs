@@ -61,7 +61,6 @@ public class LevelManager : SingletonBehaviour<LevelManager>
 
     public void GenerateLevel()
     {
-        FindObjectOfType<GameManagerAim>().DebugString.Values[2].Value = " GenerateLevel";
         FindObjectOfType<GridManager>().GenerteGridRandom();
         //GridManager.instance.GenerteGridRandom();
     }

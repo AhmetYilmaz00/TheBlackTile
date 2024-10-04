@@ -35,11 +35,7 @@ namespace Code.GUI
         private void OnEnable()
         {
             _gameManagerAim = FindObjectOfType<GameManagerAim>();
-            if (_gameManagerAim.IsServer())
-            {
-                _gameManagerAim.DebugString.Values[12].Value = "OnEnable";
-            }
-
+           
             Messenger<Block>.AddListener(Message.OnBlockMerged, OnBlockMerged);
             Messenger<List<Block>>.AddListener(Message.OnMergeMoveStarted, OnMergeMoveStarted);
 

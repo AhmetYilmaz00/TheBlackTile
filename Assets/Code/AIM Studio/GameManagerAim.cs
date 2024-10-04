@@ -14,8 +14,10 @@ namespace Code.AIM_Studio
 
         [SerializeField] private float timerDuration;
         public ElympicsArray<ElympicsInt> seedArray = new();
+
         public bool updateGridControlClient;
-        public ElympicsArray<ElympicsString> DebugString = new();
+
+        //  public ElympicsArray<ElympicsString> DebugString = new();
         private DisplayManager displayManager;
 
 
@@ -29,24 +31,16 @@ namespace Code.AIM_Studio
 
         public Guid matchID;
 
-
-        private void OnMatchDataReceived(MatchDataReceivedArgs args)
-        {
-            matchID = args.MatchId;
-            Debug.Log("Match data received: " + matchID); // args içindeki verilere göre işlemler yapılır
-        }
-
         private void Start()
         {
             displayManager = FindObjectOfType<DisplayManager>();
-            ElympicsLobbyClient.Instance.RoomsManager.MatchDataReceived += OnMatchDataReceived;
         }
 
         public void Initialize()
         {
             timer.Value = timerDuration;
             seedArray = new ElympicsArray<ElympicsInt>(50, () => new ElympicsInt());
-            DebugString = new ElympicsArray<ElympicsString>(100, () => new ElympicsString());
+            //  DebugString = new ElympicsArray<ElympicsString>(100, () => new ElympicsString());
             _isServer = Elympics.IsServer;
             // if (Elympics.IsClient)
             // {
@@ -65,12 +59,10 @@ namespace Code.AIM_Studio
                 generatedSeed = _seedCounter + DateTime.Now.Millisecond;
 
                 seedArray.Values[_seedCounter].Value = generatedSeed;
-                Debug.Log("Sunucu tarafından belirlenen seed: " + generatedSeed);
             }
             else
             {
                 generatedSeed = seedArrayClient[_seedCounter];
-                Debug.Log("Client tarafından belirlenen seed: " + generatedSeed);
             }
 
             _seedCounter++;
@@ -115,21 +107,10 @@ namespace Code.AIM_Studio
                 foreach (var value in seedArray.Values)
                 {
                     seedArrayClient.Add(value);
-                    Debug.Log("value: " + value);
-                    Debug.Log(value);
                 }
 
                 GameManager.instance.StartLevel();
                 ClearAllData();
-            }
-
-            if (_isServer)
-            {
-                DebugString.Values[15].Value = "Score: " + score.Value;
-            }
-            else
-            {
-//                Debug.Log("timer: " + timer.Value);
             }
 
             if (timer.Value <= 0 && !_isFinishGame)
@@ -167,7 +148,6 @@ namespace Code.AIM_Studio
             foreach (var value in seedArray.Values)
             {
                 seedArrayClient.Add(value);
-                Debug.Log(value);
             }
 
             currentHandBlocks = 0;
