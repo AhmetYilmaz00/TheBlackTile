@@ -292,6 +292,8 @@ namespace Code.Managers
             if (!_gameManagerAim.IsServer())
             {
                 InputManager.instance.inputWait = true;
+
+
                 yield return new WaitUntil(() =>
                     _gameManagerAim.currentHandBlocks > 0 && _gameManagerAim.seedArray.Values.Count(x => x != 0) > 0);
                 _gameManagerAim.RepairSeedArray();
@@ -312,7 +314,6 @@ namespace Code.Managers
 
             AnimationsPlaying = false;
         }
-
 
         private void MoveNumbersDown()
         {
@@ -478,7 +479,6 @@ namespace Code.Managers
                     Block block;
                     if (x == defenderPos.x && y == defenderPos.y)
                     {
-
                         block = GetDefenderBlock();
                         DefenderBlock = block;
                     }

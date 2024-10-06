@@ -143,14 +143,15 @@ namespace AIMStudio.Scripts
 
         public void OnSubmit()
         {
-            //not sure if loading animation manager will work.
-            LoadingAnimationManager.instance.StartLoadingAnimation();
-
-            //Go back to main menu
-            ElympicsAuthenticationHandler.ReturningBack = true;
-            ElympicsAuthenticationHandler.InMatch = false;
-
-            SceneManager.LoadScene(0, LoadSceneMode.Single);
+            SceneManager.LoadScene(0);
+            // //not sure if loading animation manager will work.
+            // LoadingAnimationManager.instance.StartLoadingAnimation();
+            //
+            // //Go back to main menu
+            // ElympicsAuthenticationHandler.ReturningBack = true;
+            // ElympicsAuthenticationHandler.InMatch = false;
+            //
+            // SceneManager.LoadScene(0, LoadSceneMode.Single);
         }
     }
 }

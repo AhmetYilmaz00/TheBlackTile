@@ -29,7 +29,7 @@ namespace Code.GUI
             Debug.Log("GUILOSEPANEL");
             _displayManager.GetRespect();
 
-          
+
             //  HighScoreText.text = GameManager.instance.Progress.highScore.ToString();
         }
 
@@ -46,14 +46,47 @@ namespace Code.GUI
 
         public void OnSubmit()
         {
-            //not sure if loading animation manager will work.
-            LoadingAnimationManager.instance.StartLoadingAnimation();
+            SceneManager.LoadScene(0);
 
-            //Go back to main menu
-            ElympicsAuthenticationHandler.ReturningBack = true;
-            ElympicsAuthenticationHandler.InMatch = false;
+            // //not sure if loading animation manager will work.
+            // LoadingAnimationManager.instance.StartLoadingAnimation();
+            //
+            // //Go back to main menu
+            // ElympicsAuthenticationHandler.ReturningBack = true;
+            // ElympicsAuthenticationHandler.InMatch = false;
+            // ClearAllDontDestroyOnLoadObjects();
+            // SceneManager.LoadScene(0);
+        }
 
-            SceneManager.LoadScene(0, LoadSceneMode.Single);
+        public void ClearAllDontDestroyOnLoadObjects()
+        {
+            // DontDestroyOnLoad sahnesine ulaş
+            Scene dontDestroyOnLoadScene = GetDontDestroyOnLoadScene();
+
+            if (dontDestroyOnLoadScene.IsValid())
+            {
+                // Sahnedeki tüm root GameObject'leri bul ve yok et
+                GameObject[] rootObjects = dontDestroyOnLoadScene.GetRootGameObjects();
+                foreach (GameObject obj in rootObjects)
+                {
+                    Destroy(obj);
+                }
+            }
+        }
+
+        private Scene GetDontDestroyOnLoadScene()
+        {
+            // Tüm sahneleri dolaş ve DontDestroyOnLoad sahnesini bul
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                Scene scene = SceneManager.GetSceneAt(i);
+                if (scene.name == "DontDestroyOnLoad")
+                {
+                    return scene;
+                }
+            }
+
+            return default;
         }
     }
 }

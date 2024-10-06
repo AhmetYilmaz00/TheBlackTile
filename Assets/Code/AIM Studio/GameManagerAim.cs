@@ -122,10 +122,8 @@ namespace Code.AIM_Studio
                     timer.Value = 0;
                     EndGame();
                 }
-                else
-                {
-                    GameManager.instance.OnLevelLose();
-                }
+
+                this.Invoke(() => GameManager.instance.OnLevelLose(), 1.7f);
             }
 
             if (timer.Value > 0)

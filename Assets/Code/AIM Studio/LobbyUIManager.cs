@@ -19,7 +19,6 @@ namespace Code.AIM_Studio
             new List<(TextMeshProUGUI, TextMeshProUGUI)>();
 
         [SerializeField] private TextMeshProUGUI playButtonText;
-
         [SerializeField] private GameObject connectWalletButton;
         [SerializeField] private GameObject authenticationInProgressScreen;
         [SerializeField] private GameObject matchmakingInProgressScreen;

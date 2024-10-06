@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Code.Managers;
@@ -38,6 +39,8 @@ namespace Code.AIM_Studio
 
         private GameManagerAim _gameManagerAim;
         private GridManager _gridManager;
+        private InputManager _inputManager;
+
         public bool IsDragging => isDraggingState;
         public Vector3 MousePosition => new Vector3(mousePositionX, mousePositionY, 0);
         public Vector3 ScreenPosition => new Vector3(screenPositionX, screenPositionY, 0);
@@ -54,9 +57,19 @@ namespace Code.AIM_Studio
             }
         }
 
-
         private void Update()
         {
+            PlayerInputControllerAimUpdate();
+            _inputManager.InputManagerUpdate();
+        }
+
+        private void PlayerInputControllerAimUpdate()
+        {
+            if (_gridManager.AnimationsPlaying)
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0))
             {
                 mouseButtonState = 1;
@@ -89,6 +102,7 @@ namespace Code.AIM_Studio
         {
             _gameManagerAim = FindObjectOfType<GameManagerAim>();
             _gridManager = FindObjectOfType<GridManager>();
+            _inputManager = FindObjectOfType<InputManager>();
         }
 
         float RescaleValue(float value, float oldMin, float oldMax, float newMin, float newMax)

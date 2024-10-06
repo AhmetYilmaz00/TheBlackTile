@@ -299,8 +299,9 @@ public class LeaderboardsDisplayer : MonoBehaviour
     {
         for (int i = 0; i < leaderboardVisualEntries.Length; i++)
         {
-            if (storedEntries[i] == null) leaderboardVisualEntries[i].gameObject.SetActive(false);
-            else leaderboardVisualEntries[i].SetValues(storedEntries[i]);
+            // if (storedEntries[i] == null) leaderboardVisualEntries[i].gameObject.SetActive(false);
+            //  else
+            leaderboardVisualEntries[i].SetValues(storedEntries[i]);
         }
     }
 
@@ -308,7 +309,7 @@ public class LeaderboardsDisplayer : MonoBehaviour
     {
         for (int i = 0; i < leaderboardVisualEntries.Length; i++)
         {
-            leaderboardVisualEntries[i].gameObject.SetActive(false);
+            //  leaderboardVisualEntries[i].gameObject.SetActive(false);
         }
     }
 }

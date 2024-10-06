@@ -53,7 +53,7 @@ namespace Code.Managers
         }
 
 
-        private void Update()
+        public void InputManagerUpdate()
         {
             if (!_playerInputControllerAim)
             {
